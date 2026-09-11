@@ -12,11 +12,15 @@ export const SocketProvider = ({ children }) => {
   const socketRef = useRef(null);
 
   useEffect(() => {
+    const token = localStorage.getItem('crisissync_token');
     const socket = io(SOCKET_URL, {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 20,
       reconnectionDelay: 1000,
-      timeout: 10000
+      timeout: 10000,
+      auth: {
+        token: token || undefined
+      }
     });
 
     socketRef.current = socket;
