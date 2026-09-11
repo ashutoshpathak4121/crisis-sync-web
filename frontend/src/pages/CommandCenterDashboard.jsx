@@ -119,34 +119,35 @@ const CommandCenterDashboard = () => {
         />
       </div>
 
-      {/* View Switcher Tabs */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-        <div className="flex items-center gap-2">
+      {/* View Switcher Segmented Control */}
+      <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#080E1C] border border-white/[0.06]">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === 'overview'
-                ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
+                : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
             }`}
           >
             Tactical Map & Triage
           </button>
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === 'analytics'
-                ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
+                : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
             }`}
           >
             Capacity Analytics (Charts)
           </button>
         </div>
 
-        <span className="text-xs text-slate-400 font-mono hidden sm:inline-block">
-          Auto-Refreshing via WebSocket
-        </span>
+        <div className="flex items-center gap-2 text-xs text-slate-400 font-mono hidden sm:flex">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+          <span>Auto-Syncing via WebSocket</span>
+        </div>
       </div>
 
       {/* Tab 1: Tactical Map & Triage Matrix */}
@@ -154,10 +155,10 @@ const CommandCenterDashboard = () => {
         <div className="space-y-6">
           {/* Main Interactive Live Map */}
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-3 px-1">
               <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
                 <Activity className="w-4 h-4 text-cyan-400" />
-                Live City-Wide Emergency Telemetry
+                Live Metropolitan Emergency Telemetry
               </h3>
               <span className="text-xs text-slate-400 font-mono">
                 Click any hospital, ambulance, or incident to inspect

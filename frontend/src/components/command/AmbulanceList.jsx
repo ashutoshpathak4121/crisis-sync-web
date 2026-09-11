@@ -30,18 +30,27 @@ const AmbulanceList = ({ ambulances = [] }) => {
   };
 
   return (
-    <div className="rounded-xl border border-[#1E2E48] bg-[#0E1626] p-4 shadow-xl">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Ambulance className="w-4 h-4 text-cyan-400" />
-          <h4 className="text-sm font-bold text-white tracking-wide">
-            Active Ambulance Fleet ({ambulances.length})
-          </h4>
+    <div className="rounded-2xl border border-white/[0.08] bg-[#0B1324]/85 backdrop-blur-xl p-5 shadow-xl">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
+            <Ambulance className="w-4 h-4" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-white tracking-wide">
+              Active Ambulance Fleet
+            </h4>
+            <span className="text-[10px] font-mono text-slate-400">
+              {ambulances.length} Units Online & Tracked
+            </span>
+          </div>
         </div>
-        <span className="text-[11px] font-mono text-cyan-400">1-Click ER Assignment</span>
+        <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20">
+          GPS Live Sync
+        </span>
       </div>
 
-      <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
+      <div className="space-y-3 max-h-[380px] overflow-y-auto pr-1">
         {ambulances.map((amb) => {
           const isLoading = loadingAmbId === amb.id;
           const isAttached = !!amb.destinationHospital || !!amb.destinationHospitalId;
@@ -50,10 +59,10 @@ const AmbulanceList = ({ ambulances = [] }) => {
           return (
             <div
               key={amb.id}
-              className={`p-3 rounded-xl border transition-all ${
+              className={`p-3.5 rounded-xl border transition-all duration-300 ${
                 isAttached
-                  ? 'bg-[#0b1322] border-emerald-500/30 ring-1 ring-emerald-500/10'
-                  : 'bg-[#080C15] border-slate-800/80 hover:border-slate-700'
+                  ? 'bg-emerald-950/20 border-emerald-500/40 shadow-sm shadow-emerald-500/10 ring-1 ring-emerald-500/20'
+                  : 'bg-[#070D1A] border-white/[0.06] hover:border-white/[0.12]'
               }`}
             >
               <div className="flex items-start justify-between gap-2">
@@ -66,25 +75,26 @@ const AmbulanceList = ({ ambulances = [] }) => {
                   </div>
                   <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1.5">
                     <User className="w-3 h-3 text-slate-500" />
-                    <span>{amb.paramedic?.name || 'Paramedic Unit'}</span>
+                    <span>{amb.paramedic?.name || 'Paramedic On Duty'}</span>
                   </p>
                 </div>
 
-                <div className="text-right text-[10px] font-mono text-slate-500">
+                <div className="text-right text-[10px] font-mono text-slate-400 bg-white/[0.02] px-2 py-1 rounded-lg border border-white/[0.04]">
                   <div>{amb.latitude.toFixed(4)}°N</div>
                   <div>{amb.longitude.toFixed(4)}°E</div>
                 </div>
               </div>
 
               {/* Destination & Action Bar */}
-              <div className="mt-2.5 pt-2 border-t border-slate-800/60 flex items-center justify-between gap-2 flex-wrap">
+              <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-2 flex-wrap">
                 {isAttached ? (
                   <div className="flex items-center gap-1.5 text-[11px] text-emerald-300 font-medium truncate max-w-[200px]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <Link2 className="w-3 h-3 text-emerald-400 flex-shrink-0" />
-                    <span className="truncate">Attached: <strong>{hospitalName}</strong></span>
+                    <span className="truncate">ER: <strong>{hospitalName}</strong></span>
                   </div>
                 ) : (
-                  <span className="text-[11px] text-slate-500 italic">No destination attached</span>
+                  <span className="text-[11px] text-slate-500 italic">No ER currently attached</span>
                 )}
 
                 <div className="flex items-center gap-1.5 ml-auto">
@@ -92,13 +102,13 @@ const AmbulanceList = ({ ambulances = [] }) => {
                     <button
                       onClick={() => handleDetach(amb.id)}
                       disabled={isLoading}
-                      className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold text-slate-400 hover:text-red-300 hover:bg-red-950/40 border border-slate-700 hover:border-red-500/40 transition-colors"
+                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold text-slate-300 hover:text-red-300 hover:bg-red-950/40 border border-white/[0.08] hover:border-red-500/40 transition-all"
                       title="Detach ambulance from current hospital"
                     >
                       {isLoading ? (
-                        <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                        <Loader2 className="w-3 h-3 animate-spin" />
                       ) : (
-                        <Unlink className="w-2.5 h-2.5" />
+                        <Unlink className="w-3 h-3" />
                       )}
                       Detach
                     </button>
@@ -106,13 +116,13 @@ const AmbulanceList = ({ ambulances = [] }) => {
                     <button
                       onClick={() => handleAttach(amb.id)}
                       disabled={isLoading}
-                      className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-emerald-600/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-600 hover:text-white transition-all active:scale-95"
+                      className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-sm shadow-emerald-500/25 transition-all active:scale-95"
                       title="Automatically find & attach the nearest accepting hospital with ER beds"
                     >
                       {isLoading ? (
-                        <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                        <Loader2 className="w-3 h-3 animate-spin" />
                       ) : (
-                        <Zap className="w-2.5 h-2.5 fill-emerald-400 text-emerald-400" />
+                        <Zap className="w-3 h-3 fill-white text-white" />
                       )}
                       Attach Near ER
                     </button>

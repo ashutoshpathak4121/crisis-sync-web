@@ -132,23 +132,22 @@ const AmbulanceDashboard = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Paramedic Status Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl border border-[#1E2E48] bg-[#0E1626]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl border border-white/[0.08] bg-[#0B1324]/85 backdrop-blur-xl shadow-xl">
         <div className="flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-400 shadow-glow-cyan">
             <AmbulanceIcon className="w-7 h-7" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-bold text-white tracking-tight font-['Outfit']">
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-2xl font-black text-white tracking-tight font-['Outfit']">
                 Unit {currentAmbulance.vehicleNumber}
               </h2>
               <StatusBadge status={currentAmbulance.status} type="ambulance" size="md" />
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Paramedic: <span className="text-slate-200 font-semibold">{user?.name || 'On Duty'}</span> | GPS:{' '}
-              <span className="font-mono text-cyan-400">
-                {currentAmbulance.latitude.toFixed(4)}°N, {currentAmbulance.longitude.toFixed(4)}°E
-              </span>
+            <p className="text-xs text-slate-400 mt-1 flex items-center gap-2 flex-wrap font-mono">
+              <span>Paramedic: <strong className="text-slate-200">{user?.name || 'On Duty'}</strong></span>
+              <span className="text-slate-600">•</span>
+              <span>GPS: <strong className="text-cyan-400">{currentAmbulance.latitude.toFixed(4)}°N, {currentAmbulance.longitude.toFixed(4)}°E</strong></span>
             </p>
           </div>
         </div>
@@ -157,7 +156,7 @@ const AmbulanceDashboard = () => {
         <div className="flex items-center gap-2.5 flex-wrap">
           {/* Attached Hospital Status Badge & Detach Action */}
           {currentAmbulance.destinationHospital ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-950/70 border border-emerald-500/50 text-emerald-200 text-xs font-semibold shadow-lg shadow-emerald-950/40">
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-200 text-xs font-semibold shadow-lg shadow-emerald-950/50">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
               <Link2 className="w-3.5 h-3.5 text-emerald-400" />
               <span>
@@ -175,10 +174,10 @@ const AmbulanceDashboard = () => {
             <button
               onClick={() => handleAttachNearestHospital()}
               disabled={isAttachingHospital}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-lg ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-lg ${
                 isAttachingHospital
                   ? 'bg-emerald-600/50 text-emerald-200 border border-emerald-400 animate-pulse'
-                  : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-emerald-600/25'
+                  : 'bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-glow-emerald'
               }`}
               title="Automatically find and attach to the closest accepting hospital with available ER beds"
             >
@@ -189,7 +188,7 @@ const AmbulanceDashboard = () => {
 
           <button
             onClick={() => setIsReportModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/20 transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white shadow-lg shadow-red-600/30 transition-all active:scale-95"
           >
             <PlusCircle className="w-4 h-4" />
             Report Scene Incident

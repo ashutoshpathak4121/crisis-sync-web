@@ -46,27 +46,35 @@ const SimulationController = () => {
   };
 
   return (
-    <div className="rounded-xl border border-cyan-500/40 bg-gradient-to-r from-[#0E1626] via-[#121D32] to-[#0E1626] p-4 shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-r from-[#0B1426]/95 via-[#0E1A33]/95 to-[#0B1426]/95 p-4 sm:p-5 shadow-2xl backdrop-blur-2xl">
+      {/* Top micro light reflection */}
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Left: Info */}
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
+        <div className="flex items-center gap-3.5">
+          <div className="p-3 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 shadow-glow-cyan">
             <Radio className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400">
-                Hackathon Judge Simulation Engine
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
+                <Activity className="w-3.5 h-3.5" />
+                Live Incident Simulation Engine
               </span>
-              {simulationStatus.active && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-red-500/20 text-red-400 border border-red-500/40 animate-pulse">
-                  Surge Active (Step {simulationStatus.step}/5)
+              {simulationStatus.active ? (
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-extrabold uppercase bg-red-500/20 text-red-300 border border-red-500/40 animate-pulse shadow-sm shadow-red-500/30">
+                  SURGE ACTIVE // STEP {simulationStatus.step}/5
+                </span>
+              ) : (
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium uppercase bg-white/[0.04] text-slate-400 border border-white/[0.08]">
+                  STANDBY READY
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <p className="text-xs text-slate-300 mt-1 max-w-xl">
               {simulationStatus.description ||
-                'Simulate real-time casualty surges and hospital saturation without page refreshes.'}
+                'Simulate real-time casualty surges, automated ER saturation, and dynamic paramedic rerouting without page reload.'}
             </p>
           </div>
         </div>
@@ -76,7 +84,7 @@ const SimulationController = () => {
           <button
             onClick={handleStartSurge}
             disabled={simulationStatus.active || loadingAction === 'surge'}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white shadow-lg shadow-red-500/20 disabled:opacity-50 transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white shadow-lg shadow-red-600/30 disabled:opacity-50 transition-all active:scale-95"
           >
             <Play className="w-3.5 h-3.5 fill-white" />
             {loadingAction === 'surge' ? 'Triggering...' : 'Start Surge Demo'}
@@ -85,7 +93,7 @@ const SimulationController = () => {
           <button
             onClick={handleTriggerIncident}
             disabled={loadingAction === 'incident'}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/[0.04] hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 border border-white/[0.1] hover:border-amber-500/40 transition-all active:scale-95"
           >
             <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
             Spawn Mass Incident
@@ -94,7 +102,7 @@ const SimulationController = () => {
           <button
             onClick={handleReset}
             disabled={loadingAction === 'reset'}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all active:scale-95"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border border-white/[0.08] transition-all active:scale-95"
             title="Reset baseline capacities for all hospitals"
           >
             <RotateCcw className="w-3.5 h-3.5" />

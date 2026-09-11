@@ -119,14 +119,14 @@ const HospitalDashboard = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl border border-[#1E2E48] bg-[#0E1626] shadow-xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl border border-white/[0.08] bg-[#0B1324]/85 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 text-cyan-400">
+          <div className="p-3.5 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-400 shadow-glow-cyan">
             <Building2 className="w-8 h-8" />
           </div>
           <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h2 className="text-2xl font-bold text-white tracking-tight font-['Outfit']">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h2 className="text-2xl font-black text-white tracking-tight font-['Outfit']">
                 {activeHospital.name}
               </h2>
               <StatusBadge status={activeHospital.emergencyStatus} type="hospital" size="md" />
@@ -145,7 +145,7 @@ const HospitalDashboard = () => {
             <select
               value={selectedHospitalId}
               onChange={(e) => setSelectedHospitalId(e.target.value)}
-              className="bg-[#080C15] border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:border-cyan-500 focus:outline-none"
+              className="bg-[#060B16] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-slate-200 focus:border-cyan-400 focus:outline-none transition-all cursor-pointer"
             >
               {hospitals.map((h) => (
                 <option key={h.id} value={h.id}>
@@ -156,11 +156,11 @@ const HospitalDashboard = () => {
           </div>
 
           {/* Clock pill */}
-          <div className="bg-[#080C15] px-4 py-2 rounded-xl border border-slate-800 font-mono text-xs text-right">
+          <div className="bg-[#060B16] px-4 py-2 rounded-xl border border-white/[0.08] font-mono text-xs text-right shadow-sm">
             <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-sans">
               Local Station Time
             </span>
-            <span className="text-cyan-400 font-bold text-sm">
+            <span className="text-cyan-300 font-black text-sm">
               {currentTime.toLocaleTimeString()}
             </span>
           </div>

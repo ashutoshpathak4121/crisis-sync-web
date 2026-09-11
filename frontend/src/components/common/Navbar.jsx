@@ -62,30 +62,35 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[#1E2E48] bg-[#080C15]/90 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 w-full px-3 sm:px-6 pt-3 pb-1">
+      <div className="max-w-7xl mx-auto rounded-2xl border border-white/[0.08] bg-[#070D1A]/80 backdrop-blur-2xl shadow-2xl shadow-black/60 px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Brand Logo */}
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-cyan-500 p-0.5 shadow-lg shadow-cyan-500/10 group-hover:shadow-cyan-500/25 transition-all">
-                <div className="w-full h-full bg-[#080C15] rounded-[10px] flex items-center justify-center">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-blue-600 p-[1.5px] shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-300">
+                <div className="w-full h-full bg-[#070D1A] rounded-[10px] flex items-center justify-center">
                   <Radio className="w-5 h-5 text-cyan-400 animate-pulse" />
                 </div>
               </div>
               <div>
-                <span className="text-lg font-extrabold tracking-tight text-white flex items-center gap-1.5 font-['Outfit']">
-                  Crisis<span className="text-cyan-400">Sync</span>
-                </span>
-                <span className="block text-[10px] uppercase font-mono tracking-widest text-slate-400 -mt-0.5">
-                  Real-Time Resource Allocator
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-black tracking-tight text-white font-['Outfit']">
+                    Crisis<span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">Sync</span>
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[9px] font-mono font-bold text-cyan-400 uppercase tracking-widest hidden sm:inline-block">
+                    PRO v2.6
+                  </span>
+                </div>
+                <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-400 -mt-0.5">
+                  Emergency Telemetry Sync
                 </span>
               </div>
             </Link>
           </div>
 
           {/* Center Nav Links */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.02] border border-white/[0.04]">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = location.pathname === link.path;
@@ -93,14 +98,17 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+                  className={`relative flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all duration-200 ${
                     isActive
-                      ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                      ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
+                      : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
                   {link.name}
+                  {isActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                  )}
                 </Link>
               );
             })}
@@ -111,11 +119,11 @@ const Navbar = () => {
             <ConnectionStatus />
 
             {/* Quick Demo Simulation Controls */}
-            <div className="flex items-center gap-1.5 border-l border-slate-800 pl-3">
+            <div className="flex items-center gap-1.5 border-l border-white/[0.08] pl-3">
               {simulationStatus.active ? (
                 <button
                   onClick={resetSimulation}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25 transition-all"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-red-500/15 text-red-400 border border-red-500/40 hover:bg-red-500/25 transition-all shadow-sm shadow-red-500/20"
                   title="Reset Demo Simulation"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -125,7 +133,7 @@ const Navbar = () => {
                 <button
                   onClick={handleStartSimulation}
                   disabled={isSurging}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/25 hover:border-cyan-400 transition-all shadow-sm shadow-cyan-500/10"
+                  className="relative group overflow-hidden flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-cyan-500/20 via-teal-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 hover:shadow-glow-cyan transition-all shadow-sm active:scale-95"
                   title="Trigger Mass Casualty Demo on Hospital"
                 >
                   <PlayCircle className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
@@ -135,14 +143,17 @@ const Navbar = () => {
             </div>
 
             {/* User Profile / Login */}
-            <div className="border-l border-slate-800 pl-3">
+            <div className="border-l border-white/[0.08] pl-3">
               {isAuthenticated ? (
-                <div className="flex items-center gap-2.5">
-                  <div className="text-right">
-                    <p className="text-xs font-bold text-slate-200 truncate max-w-[130px]">
+                <div className="flex items-center gap-2.5 bg-white/[0.02] border border-white/[0.06] rounded-xl px-2.5 py-1">
+                  <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+                    {user.name.charAt(0)}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs font-bold text-slate-200 truncate max-w-[110px] leading-tight">
                       {user.name}
                     </p>
-                    <span className="text-[10px] text-cyan-400 font-mono uppercase">
+                    <span className="text-[9px] text-cyan-400 font-mono uppercase font-semibold">
                       {user.role}
                     </span>
                   </div>
@@ -151,16 +162,16 @@ const Navbar = () => {
                       logout();
                       navigate('/login');
                     }}
-                    className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
+                    className="p-1 rounded-lg text-slate-400 hover:text-red-400 hover:bg-white/[0.06] transition-colors"
                     title="Sign Out"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ) : (
                 <Link
                   to="/login"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all border border-slate-700"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white/[0.05] hover:bg-cyan-500/20 text-slate-200 hover:text-cyan-300 transition-all border border-white/[0.1] hover:border-cyan-500/40"
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   Demo Login
