@@ -1,0 +1,24 @@
+{
+  "name": "crisissync",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CrisisSync — Real-Time Emergency Resource Allocator",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "start": "npm --prefix backend start",
+    "start:backend": "npm --prefix backend start",
+    "build": "npm --prefix frontend run build",
+    "test": "npm --prefix backend test"
+  },
+  "keywords": [
+    "emergency-response",
+    "real-time",
+    "hospital-allocation",
+    "socket.io",
+    "react"
+  ],
+  "author": "Ashutosh Pathak <https://github.com/ashutoshpathak4121>",
+  "license": "MIT"
+}

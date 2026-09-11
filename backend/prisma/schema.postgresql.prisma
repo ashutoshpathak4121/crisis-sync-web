@@ -1,0 +1,110 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String              @id @default(uuid())
+  name         String
+  email        String              @unique
+  passwordHash String
+  role         String              @default("PARAMEDIC") // ADMIN, HOSPITAL, PARAMEDIC
+  hospitalId   String?
+  hospital     Hospital?           @relation(fields: [hospitalId], references: [id])
+  ambulances   Ambulance[]
+  auditLogs    ResourceUpdateLog[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+}
+
+model Hospital {
+  id              String              @id @default(uuid())
+  name            String
+  address         String
+  latitude        Float
+  longitude       Float
+  phone           String
+  emergencyStatus String              @default("ACCEPTING") // ACCEPTING, LIMITED, CRITICAL, FULL, OFFLINE
+  staff           User[]
+  resources       HospitalResource?
+  routes          Route[]
+  auditLogs       ResourceUpdateLog[]
+  ambulances      Ambulance[]         @relation("DestinationHospital")
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+}
+
+model HospitalResource {
+  id                      String   @id @default(uuid())
+  hospitalId              String   @unique
+  hospital                Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  emergencyBedsTotal      Int      @default(20)
+  emergencyBedsAvailable  Int      @default(10)
+  icuBedsTotal            Int      @default(10)
+  icuBedsAvailable        Int      @default(3)
+  ventilatorsTotal        Int      @default(6)
+  ventilatorsAvailable    Int      @default(4)
+  operatingRoomsTotal     Int      @default(4)
+  operatingRoomsAvailable Int      @default(2)
+  bloodUnitsAvailable     Int      @default(45)
+  traumaTeamAvailable     Boolean  @default(true)
+  updatedAt               DateTime @updatedAt
+}
+
+model Ambulance {
+  id                    String      @id @default(uuid())
+  vehicleNumber         String      @unique
+  paramedicId           String?
+  paramedic             User?       @relation(fields: [paramedicId], references: [id])
+  latitude              Float
+  longitude             Float
+  status                String      @default("AVAILABLE") // AVAILABLE, EN_ROUTE, AT_SCENE, TRANSPORTING, ARRIVED, OFFLINE
+  currentIncidentId     String?
+  currentIncident       Incident?   @relation(fields: [currentIncidentId], references: [id])
+  destinationHospitalId String?
+  destinationHospital   Hospital?   @relation("DestinationHospital", fields: [destinationHospitalId], references: [id])
+  routes                Route[]
+  updatedAt             DateTime    @updatedAt
+}
+
+model Incident {
+  id           String      @id @default(uuid())
+  type         String
+  severity     String      @default("HIGH") // LOW, MEDIUM, HIGH, CRITICAL
+  description  String
+  latitude     Float
+  longitude    Float
+  patientCount Int         @default(1)
+  status       String      @default("REPORTED") // REPORTED, DISPATCHED, ON_SCENE, TRANSPORTING, RESOLVED
+  ambulances   Ambulance[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Route {
+  id          String    @id @default(uuid())
+  ambulanceId String
+  ambulance   Ambulance @relation(fields: [ambulanceId], references: [id], onDelete: Cascade)
+  hospitalId  String
+  hospital    Hospital  @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  distance    Float
+  duration    Float
+  geometry    String?   // JSON polyline / coordinates string
+  createdAt   DateTime  @default(now())
+}
+
+model ResourceUpdateLog {
+  id           String   @id @default(uuid())
+  hospitalId   String
+  hospital     Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  resourceType String
+  oldValue     Int
+  newValue     Int
+  timestamp    DateTime @default(now())
+}
