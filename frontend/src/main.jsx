@@ -5,18 +5,21 @@ import App from './App';
 import { AuthProvider } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import { EmergencyDataProvider } from './context/EmergencyDataContext';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <SocketProvider>
-          <EmergencyDataProvider>
-            <App />
-          </EmergencyDataProvider>
-        </SocketProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AuthProvider>
+          <SocketProvider>
+            <EmergencyDataProvider>
+              <App />
+            </EmergencyDataProvider>
+          </SocketProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 );

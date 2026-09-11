@@ -1,3 +1,6 @@
+import React from 'react';
+import { CheckCircle2, AlertTriangle, AlertOctagon, XCircle, PowerOff } from 'lucide-react';
+
 const statuses = [
   {
     id: 'ACCEPTING',

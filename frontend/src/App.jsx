@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#080C15] text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#050811] text-slate-100 flex flex-col">
       <Navbar />
       <div className="flex-1">
         <Routes>
