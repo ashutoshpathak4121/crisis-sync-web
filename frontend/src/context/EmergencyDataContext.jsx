@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useSocket } from './SocketContext';
 import {
@@ -65,6 +66,7 @@ export const EmergencyDataProvider = ({ children }) => {
       if (ambData.length > 0 && !selectedAmbulance) {
         setSelectedAmbulance(ambData[0]);
       }
+
       setIncidents(incData);
       setLastSyncTime(new Date());
     } catch (err) {
@@ -183,7 +185,7 @@ export const EmergencyDataProvider = ({ children }) => {
           if (amb.id === data.ambulanceId) {
             const destHospital = data.destinationHospitalId
               ? hospitals.find((h) => h.id === data.destinationHospitalId) ||
-                (data.hospitalName ? { id: data.destinationHospitalId, name: data.hospitalName } : amb.destinationHospital)
+              (data.hospitalName ? { id: data.destinationHospitalId, name: data.hospitalName } : amb.destinationHospital)
               : null;
 
             return {

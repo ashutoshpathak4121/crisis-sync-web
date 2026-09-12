@@ -1,45 +1,14 @@
-@import 'leaflet/dist/leaflet.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Leaflet Map and Popup styling */
-.leaflet-popup-content-wrapper {
-  background: #0E1626 !important;
-  color: #F1F5F9 !important;
-  border: 1px solid #1E2E48 !important;
-  border-radius: 12px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 0 15px rgba(6, 182, 212, 0.2) !important;
-  padding: 0 !important;
-}
-
-.leaflet-popup-content {
-  margin: 12px 14px !important;
-  line-height: 1.4 !important;
-}
-
-.leaflet-popup-tip {
-  background: #0E1626 !important;
-  border: 1px solid #1E2E48 !important;
-}
-
-.leaflet-container {
-  background-color: #080C15 !important;
-  font-family: inherit !important;
-}
-
-/* Marker pulse animations */
-@keyframes pingMarker {
-  0% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.6); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
-}
-
-.marker-pulse {
-  animation: pingMarker 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
 @layer base {
+  /* Cross-browser Scrollbars */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  }
+
   body {
     background-color: #050811;
     color: #F8FAFC;
@@ -62,88 +31,131 @@
   }
 }
 
-/* Glassmorphism 2.0 & Cockpit Surface Tokens */
-.glass-panel {
-  background: rgba(12, 19, 34, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+@layer components {
+  /* Glassmorphism 2.0 & Cockpit Surface Tokens */
+  .glass-panel {
+    background: rgba(12, 19, 34, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-panel-elevated {
+    background: rgba(15, 24, 43, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(6, 182, 212, 0.22);
+    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(6, 182, 212, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-card {
+    background: rgba(14, 23, 40, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    background: rgba(18, 29, 50, 0.85);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5), 0 0 25px -5px rgba(6, 182, 212, 0.2);
+  }
+
+  /* Tactical Crosshair Background Corner Accents */
+  .tactical-border {
+    position: relative;
+  }
+  .tactical-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid #06B6D4;
+    border-left: 2px solid #06B6D4;
+    pointer-events: none;
+  }
+  .tactical-border::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-bottom: 2px solid #06B6D4;
+    border-right: 2px solid #06B6D4;
+    pointer-events: none;
+  }
+
+  /* Custom Leaflet Map and Popup styling */
+  .leaflet-popup-content-wrapper {
+    background: #0E1626 !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #1E2E48 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 0 15px rgba(6, 182, 212, 0.2) !important;
+    padding: 0 !important;
+  }
+
+  .leaflet-popup-content {
+    margin: 12px 14px !important;
+    line-height: 1.4 !important;
+  }
+
+  .leaflet-popup-tip {
+    background: #0E1626 !important;
+    border: 1px solid #1E2E48 !important;
+  }
+
+  .leaflet-container {
+    background-color: #080C15 !important;
+    font-family: inherit !important;
+  }
 }
 
-.glass-panel-elevated {
-  background: rgba(15, 24, 43, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(6, 182, 212, 0.22);
-  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(6, 182, 212, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+@layer utilities {
+  /* Subtle Ambient Glow Utilities */
+  .glow-cyan {
+    box-shadow: 0 0 20px -3px rgba(6, 182, 212, 0.35);
+  }
+
+  .glow-emerald {
+    box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.35);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px -3px rgba(239, 68, 68, 0.35);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px -3px rgba(139, 92, 246, 0.35);
+  }
+
+  .glow-amber {
+    box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.35);
+  }
+
+  .marker-pulse {
+    animation: pingMarker 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .flash-update {
+    animation: resourceHighlightFlash 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
-.glass-card {
-  background: rgba(14, 23, 40, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+/* Marker pulse and Highlight animations */
+@keyframes pingMarker {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
 }
 
-.glass-card:hover {
-  border-color: rgba(6, 182, 212, 0.4);
-  background: rgba(18, 29, 50, 0.85);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5), 0 0 25px -5px rgba(6, 182, 212, 0.2);
-}
-
-/* Subtle Ambient Glow Utilities */
-.glow-cyan {
-  box-shadow: 0 0 20px -3px rgba(6, 182, 212, 0.35);
-}
-
-.glow-emerald {
-  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.35);
-}
-
-.glow-red {
-  box-shadow: 0 0 20px -3px rgba(239, 68, 68, 0.35);
-}
-
-.glow-purple {
-  box-shadow: 0 0 20px -3px rgba(139, 92, 246, 0.35);
-}
-
-.glow-amber {
-  box-shadow: 0 0 20px -3px rgba(245, 158, 11, 0.35);
-}
-
-/* Tactical Crosshair Background Corner Accents */
-.tactical-border {
-  position: relative;
-}
-.tactical-border::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 8px;
-  border-top: 2px solid #06B6D4;
-  border-left: 2px solid #06B6D4;
-  pointer-events: none;
-}
-.tactical-border::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 8px;
-  height: 8px;
-  border-bottom: 2px solid #06B6D4;
-  border-right: 2px solid #06B6D4;
-  pointer-events: none;
-}
-
-/* Highlight Flash Animation for Real-Time Updates */
 @keyframes resourceHighlightFlash {
   0% {
     background-color: rgba(6, 182, 212, 0.35);
@@ -162,11 +174,7 @@
   }
 }
 
-.flash-update {
-  animation: resourceHighlightFlash 1.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Modern Sleek Scrollbars */
+/* Modern Sleek WebKit Scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
