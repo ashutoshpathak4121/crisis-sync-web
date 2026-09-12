@@ -58,6 +58,7 @@ const EmergencyMap = ({
   incidents = [],
   activeRoute = null,
   onSelectHospital,
+  onAttachHospital = null,
   selectedHospitalId = null,
   onUserLocationChange = null,
   onAttachNearestHospital = null,
@@ -70,6 +71,7 @@ const EmergencyMap = ({
   const markersLayerGroupRef = useRef(null);
   const routeLayerGroupRef = useRef(null);
   const userLocationLayerGroupRef = useRef(null);
+  const hospitalMarkersRef = useRef({});
 
   const [activeTileType, setActiveTileType] = useState('GOOGLE_STREETS');
   const [showLayerMenu, setShowLayerMenu] = useState(false);
@@ -244,10 +246,12 @@ const EmergencyMap = ({
 
     const group = markersLayerGroupRef.current;
     group.clearLayers();
+    hospitalMarkersRef.current = {};
 
     // 1. Plot Hospitals
     hospitals.forEach((hosp) => {
       const isSelected = selectedHospitalId === hosp.id || activeRoute?.hospital?.id === hosp.id;
+      const isRouted = activeRoute?.hospital?.id === hosp.id;
       const res = hosp.resources || {};
       const erBeds = res.emergencyBedsAvailable !== undefined ? res.emergencyBedsAvailable : 0;
 
@@ -315,8 +319,12 @@ const EmergencyMap = ({
             <strong class="text-purple-400">${res.ventilatorsAvailable || 0}</strong>
           </div>
         </div>
-        <button id="route-btn-${hosp.id}" class="w-full py-2 px-3 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-xs uppercase tracking-wider transition-colors">
-          Select / Route Here
+        <button id="route-btn-${hosp.id}" class="w-full py-2 px-3 rounded-lg ${
+          isRouted
+            ? 'bg-emerald-500 text-slate-950 font-extrabold shadow-emerald-500/30'
+            : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold'
+        } text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-md active:scale-95">
+          ${isRouted ? '✓ Unit Attached & En-Route' : 'Dispatch / Attach Unit Here'}
         </button>
       `;
 
@@ -325,9 +333,13 @@ const EmergencyMap = ({
 
       marker.on('popupopen', () => {
         const btn = document.getElementById(`route-btn-${hosp.id}`);
-        if (btn && onSelectHospital) {
+        if (btn) {
           btn.onclick = () => {
-            onSelectHospital(hosp);
+            if (onAttachHospital) {
+              onAttachHospital(hosp);
+            } else if (onSelectHospital) {
+              onSelectHospital(hosp);
+            }
             marker.closePopup();
           };
         }
@@ -338,6 +350,7 @@ const EmergencyMap = ({
       });
 
       marker.addTo(group);
+      hospitalMarkersRef.current[hosp.id] = marker;
     });
 
     // 2. Plot Ambulances
@@ -428,7 +441,33 @@ const EmergencyMap = ({
         .bindPopup(popupHtml)
         .addTo(group);
     });
-  }, [hospitals, ambulances, incidents, selectedHospitalId, activeRoute, onSelectHospital]);
+  }, [hospitals, ambulances, incidents, selectedHospitalId, activeRoute, onSelectHospital, onAttachHospital]);
+
+  // Smoothly pan/fly map to selected hospital and open its popup
+  useEffect(() => {
+    if (!selectedHospitalId || !mapInstanceRef.current) return;
+    const targetHosp = hospitals.find((h) => h.id === selectedHospitalId);
+    if (!targetHosp) return;
+
+    try {
+      mapInstanceRef.current.invalidateSize();
+      mapInstanceRef.current.flyTo([targetHosp.latitude, targetHosp.longitude], 15, {
+        animate: true,
+        duration: 1.0
+      });
+    } catch (e) {
+      console.warn('Map flyTo failed:', e);
+    }
+
+    const timer = setTimeout(() => {
+      const marker = hospitalMarkersRef.current[selectedHospitalId];
+      if (marker && mapInstanceRef.current) {
+        marker.openPopup();
+      }
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [selectedHospitalId, hospitals]);
 
   // Route Polyline & Auto-fit bounds
   useEffect(() => {

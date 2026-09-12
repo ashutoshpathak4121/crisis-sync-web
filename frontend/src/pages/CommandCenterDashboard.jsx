@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useEmergencyData } from '../context/EmergencyDataContext';
 import StatCard from '../components/common/StatCard';
 import EmergencyMap from '../components/map/EmergencyMap';
@@ -27,6 +27,7 @@ const CommandCenterDashboard = () => {
     incidents,
     activeRoute,
     attachNearestHospital,
+    attachHospitalToAmbulance,
     recentlyUpdatedHospitalId,
     isLoading
   } = useEmergencyData();
@@ -34,6 +35,38 @@ const CommandCenterDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'analytics', 'fleet'
   const [focusedHospital, setFocusedHospital] = useState(null);
   const [isAttaching, setIsAttaching] = useState(false);
+  const mapSectionRef = useRef(null);
+
+  const handleFocusHospital = (hospital) => {
+    setFocusedHospital(hospital);
+    if (activeTab !== 'overview') {
+      setActiveTab('overview');
+    }
+    setTimeout(() => {
+      mapSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
+
+  const handleAttachSpecificHospital = async (hospital) => {
+    try {
+      setIsAttaching(true);
+      const targetAmb = ambulances.find((a) => a.status === 'AVAILABLE') || ambulances[0];
+      if (targetAmb) {
+        await attachHospitalToAmbulance(targetAmb.id, hospital.id);
+        setFocusedHospital(hospital);
+        if (activeTab !== 'overview') {
+          setActiveTab('overview');
+        }
+        setTimeout(() => {
+          mapSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      }
+    } catch (err) {
+      console.error('Failed to attach hospital to ambulance:', err);
+    } finally {
+      setIsAttaching(false);
+    }
+  };
 
   const handleAttachNearestHospital = async (userCoords = null) => {
     try {
@@ -154,7 +187,7 @@ const CommandCenterDashboard = () => {
       {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* Main Interactive Live Map */}
-          <div>
+          <div ref={mapSectionRef}>
             <div className="flex items-center justify-between mb-3 px-1">
               <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
                 <Activity className="w-4 h-4 text-cyan-400" />
@@ -170,7 +203,8 @@ const CommandCenterDashboard = () => {
               ambulances={ambulances}
               incidents={incidents}
               activeRoute={activeRoute}
-              onSelectHospital={(h) => setFocusedHospital(h)}
+              onSelectHospital={handleFocusHospital}
+              onAttachHospital={handleAttachSpecificHospital}
               selectedHospitalId={focusedHospital?.id}
               onAttachNearestHospital={handleAttachNearestHospital}
               isAttaching={isAttaching}
@@ -181,8 +215,12 @@ const CommandCenterDashboard = () => {
           {/* Hospital Resource Matrix Table */}
           <HospitalTable
             hospitals={hospitals}
-            onSelectHospital={(h) => setFocusedHospital(h)}
+            onSelectHospital={handleFocusHospital}
+            onAttachHospital={handleAttachSpecificHospital}
+            selectedHospitalId={focusedHospital?.id}
+            activeRouteHospitalId={activeRoute?.hospital?.id}
             recentlyUpdatedId={recentlyUpdatedHospitalId}
+            isAttaching={isAttaching}
           />
 
           {/* Bottom Grid: Ambulance Fleet + Live Incident Feed */}
@@ -199,8 +237,12 @@ const CommandCenterDashboard = () => {
           <CapacityCharts hospitals={hospitals} />
           <HospitalTable
             hospitals={hospitals}
-            onSelectHospital={(h) => setFocusedHospital(h)}
+            onSelectHospital={handleFocusHospital}
+            onAttachHospital={handleAttachSpecificHospital}
+            selectedHospitalId={focusedHospital?.id}
+            activeRouteHospitalId={activeRoute?.hospital?.id}
             recentlyUpdatedId={recentlyUpdatedHospitalId}
+            isAttaching={isAttaching}
           />
         </div>
       )}

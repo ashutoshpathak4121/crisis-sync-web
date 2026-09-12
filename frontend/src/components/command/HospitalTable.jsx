@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import StatusBadge from '../common/StatusBadge';
-import { Search, Filter, ArrowUpRight, Bed, Activity, Wind } from 'lucide-react';
+import { Search, Filter, ArrowUpRight, Bed, Activity, Wind, Navigation, Zap, Check } from 'lucide-react';
 
 const HospitalTable = ({
   hospitals = [],
   onSelectHospital,
-  recentlyUpdatedId = null
+  onAttachHospital,
+  selectedHospitalId = null,
+  activeRouteHospitalId = null,
+  recentlyUpdatedId = null,
+  isAttaching = false
 }) => {
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
@@ -82,6 +86,8 @@ const HospitalTable = ({
               const erPct = Math.round((erAvail / erTotal) * 100);
 
               const isRecentlyUpdated = recentlyUpdatedId === h.id;
+              const isSelected = selectedHospitalId === h.id;
+              const isRouted = activeRouteHospitalId === h.id;
 
               return (
                 <tr
@@ -89,6 +95,8 @@ const HospitalTable = ({
                   className={`transition-colors duration-200 ${
                     isRecentlyUpdated
                       ? 'flash-update bg-cyan-950/40'
+                      : isSelected
+                      ? 'bg-cyan-500/10'
                       : 'hover:bg-white/[0.03]'
                   }`}
                 >
@@ -132,12 +140,49 @@ const HospitalTable = ({
                     {res.ventilatorsAvailable || 0} / {res.ventilatorsTotal || 6}
                   </td>
                   <td className="py-3.5 px-4 text-right">
-                    <button
-                      onClick={() => onSelectHospital && onSelectHospital(h)}
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-cyan-400 hover:text-cyan-300 py-1.5 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-400 transition-all active:scale-95 shadow-sm"
-                    >
-                      Focus Map <ArrowUpRight className="w-3 h-3" />
-                    </button>
+                    <div className="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap">
+                      {/* Action 1: Focus & Locate on Tactical Map */}
+                      <button
+                        onClick={() => onSelectHospital && onSelectHospital(h)}
+                        className={`inline-flex items-center gap-1 text-[11px] font-bold py-1.5 px-2.5 rounded-xl border transition-all active:scale-95 shadow-sm ${
+                          isSelected
+                            ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-extrabold shadow-glow-cyan'
+                            : 'text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 hover:border-cyan-400'
+                        }`}
+                        title="Locate facility, center camera and display live HUD on tactical map"
+                      >
+                        <Navigation className="w-3 h-3" />
+                        <span>Focus</span>
+                      </button>
+
+                      {/* Action 2: Attach / Dispatch Ambulance to this facility */}
+                      {onAttachHospital && (
+                        isRouted ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1.5 rounded-xl font-mono">
+                            <Check className="w-3 h-3" />
+                            <span>Routed</span>
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => onAttachHospital(h)}
+                            disabled={isAttaching || h.emergencyStatus === 'FULL'}
+                            className={`inline-flex items-center gap-1 text-[11px] font-bold py-1.5 px-2.5 rounded-xl border transition-all active:scale-95 shadow-sm ${
+                              h.emergencyStatus === 'FULL'
+                                ? 'opacity-40 cursor-not-allowed text-slate-500 border-white/[0.06] bg-white/[0.02]'
+                                : 'text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 hover:border-emerald-400'
+                            }`}
+                            title={
+                              h.emergencyStatus === 'FULL'
+                                ? 'Facility at capacity divert'
+                                : 'Attach and route nearest active ambulance to this hospital'
+                            }
+                          >
+                            <Zap className="w-3 h-3" />
+                            <span>Route Unit</span>
+                          </button>
+                        )
+                      )}
+                    </div>
                   </td>
                 </tr>
               );
