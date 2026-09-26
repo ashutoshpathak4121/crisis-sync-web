@@ -104,9 +104,15 @@ const CommandCenterDashboard = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      {/* Simulation Controller Top Banner */}
-      <SimulationController />
+    <div className="min-h-screen bg-slate-100 dark:bg-[#030712] relative overflow-hidden py-6 px-4 sm:px-6 lg:px-8 font-['Plus_Jakarta_Sans',sans-serif] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+      {/* Dynamic Ambient Background Lights */}
+      <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-cyan-500/10 dark:bg-cyan-500/15 blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 -right-20 w-[550px] h-[550px] rounded-full bg-indigo-500/10 dark:bg-indigo-600/15 blur-[150px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.04)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-50" />
+
+      <div className="max-w-7xl mx-auto space-y-6 relative z-10">
+        {/* Simulation Controller Top Banner */}
+        <SimulationController />
 
       {/* KPI Stats Ribbon */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
@@ -153,14 +159,14 @@ const CommandCenterDashboard = () => {
       </div>
 
       {/* View Switcher Segmented Control */}
-      <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#080E1C] border border-white/[0.06]">
+      <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-white/[0.06] pb-3">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/80 dark:bg-[#080E1C] border border-slate-200/80 dark:border-white/[0.06] shadow-sm">
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === 'overview'
-                ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
+                ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/50 shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.03]'
             }`}
           >
             Tactical Map & Triage
@@ -169,16 +175,16 @@ const CommandCenterDashboard = () => {
             onClick={() => setActiveTab('analytics')}
             className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               activeTab === 'analytics'
-                ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm shadow-cyan-500/20'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
+                ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/50 shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/[0.03]'
             }`}
           >
             Capacity Analytics (Charts)
           </button>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-slate-400 font-mono hidden sm:flex">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-mono hidden sm:flex">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-ping" />
           <span>Auto-Syncing via WebSocket</span>
         </div>
       </div>
@@ -189,11 +195,11 @@ const CommandCenterDashboard = () => {
           {/* Main Interactive Live Map */}
           <div ref={mapSectionRef}>
             <div className="flex items-center justify-between mb-3 px-1">
-              <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
-                <Activity className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide flex items-center gap-2 font-['Outfit']">
+                <Activity className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                 Live Metropolitan Emergency Telemetry
               </h3>
-              <span className="text-xs text-slate-400 font-mono">
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                 Click any hospital, ambulance, or incident to inspect
               </span>
             </div>
@@ -246,6 +252,7 @@ const CommandCenterDashboard = () => {
           />
         </div>
       )}
+      </div>
     </div>
   );
 };

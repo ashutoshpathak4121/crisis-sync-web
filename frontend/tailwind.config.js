@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -35,9 +36,30 @@ export default {
         critical: '#F97316',
         full: '#EF4444',
         offline: '#64748B',
-        cyanAccent: '#06B6D4'
+        cyanAccent: '#06B6D4',
+        brandPurple: {
+          DEFAULT: '#4F35DE',
+          dark: '#3F25C7',
+          light: '#ECE9FD',
+          subtle: '#F6F5FD'
+        },
+        brandTeal: {
+          DEFAULT: '#2DD4BF',
+          dark: '#0F766E',
+          light: '#CCFBF1'
+        },
+        canvas: {
+          bg: '#FAFAFD',
+          card: '#FFFFFF',
+          darkBg: '#090E1A',
+          darkCard: '#0F172A'
+        }
       },
       boxShadow: {
+        'pill-dock': '0 25px 60px -10px rgba(45, 25, 130, 0.45)',
+        'card-elevated': '0 15px 35px -5px rgba(35, 25, 80, 0.08), 0 5px 15px -3px rgba(35, 25, 80, 0.04)',
+        'card-float': '0 25px 70px -15px rgba(25, 15, 60, 0.15)',
+        'subtle-card': '0 4px 20px -2px rgba(20, 15, 50, 0.04)',
         'glow-cyan': '0 0 25px -4px rgba(6, 182, 212, 0.35)',
         'glow-emerald': '0 0 25px -4px rgba(16, 185, 129, 0.35)',
         'glow-red': '0 0 25px -4px rgba(239, 68, 68, 0.35)',

@@ -46,7 +46,7 @@ const SimulationController = () => {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-r from-[#0B1426]/95 via-[#0E1A33]/95 to-[#0B1426]/95 p-4 sm:p-5 shadow-2xl backdrop-blur-2xl">
+    <div className="relative overflow-hidden rounded-[26px] border border-cyan-500/25 bg-slate-900/40 dark:bg-slate-900/50 p-4 sm:p-5 shadow-[0_15px_35px_rgba(0,0,0,0.4),0_0_20px_rgba(6,182,212,0.12)] backdrop-blur-2xl">
       {/* Top micro light reflection */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
 

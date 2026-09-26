@@ -3,13 +3,15 @@ const jwt = require('jsonwebtoken');
 const prisma = require('../config/db');
 const env = require('../config/env');
 const logger = require('../utils/logger');
+const { normalizeRole } = require('../middleware/authMiddleware');
 
 const generateToken = (user) => {
+  const normalizedRole = normalizeRole(user.role, user.email);
   return jwt.sign(
     {
       id: user.id,
       email: user.email,
-      role: user.role,
+      role: normalizedRole,
       hospitalId: user.hospitalId
     },
     env.JWT_SECRET,
@@ -18,12 +20,17 @@ const generateToken = (user) => {
 };
 
 const authService = {
-  async register({ name, email, password, role = 'PARAMEDIC', hospitalId = null }) {
+  async register({ name, email, password, phone = null, role = 'USER', hospitalId = null }) {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
       const err = new Error('A user with this email address already exists');
       err.statusCode = 409;
       throw err;
+    }
+
+    let finalRole = role;
+    if (env.SUPER_ADMIN_EMAIL && email.toLowerCase() === env.SUPER_ADMIN_EMAIL.toLowerCase()) {
+      finalRole = 'SUPER_ADMIN';
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -33,20 +40,23 @@ const authService = {
       data: {
         name,
         email,
+        phone,
         passwordHash,
-        role,
-        hospitalId: role === 'HOSPITAL' ? hospitalId : null
+        role: finalRole,
+        hospitalId: ['HOSPITAL_ADMIN', 'HOSPITAL_STAFF', 'HOSPITAL'].includes(finalRole) ? hospitalId : null
       },
       select: {
         id: true,
         name: true,
         email: true,
+        phone: true,
         role: true,
         hospitalId: true,
         createdAt: true
       }
     });
 
+    user.role = normalizeRole(user.role, user.email);
     const token = generateToken(user);
     logger.info(`New user registered: ${user.email} (${user.role})`);
 
@@ -58,7 +68,7 @@ const authService = {
       where: { email },
       include: {
         hospital: {
-          select: { id: true, name: true, emergencyStatus: true }
+          select: { id: true, name: true, emergencyStatus: true, verificationStatus: true }
         }
       }
     });
@@ -77,14 +87,16 @@ const authService = {
       throw err;
     }
 
-    const token = generateToken(user);
-    logger.info(`User logged in successfully: ${user.email} (${user.role})`);
+    const normalizedRole = normalizeRole(user.role, user.email);
+    const token = generateToken({ ...user, role: normalizedRole });
+    logger.info(`User logged in successfully: ${user.email} (${normalizedRole})`);
 
     const userSafe = {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      phone: user.phone,
+      role: normalizedRole,
       hospitalId: user.hospitalId,
       hospital: user.hospital
     };
@@ -99,10 +111,11 @@ const authService = {
         id: true,
         name: true,
         email: true,
+        phone: true,
         role: true,
         hospitalId: true,
         hospital: {
-          select: { id: true, name: true, emergencyStatus: true }
+          select: { id: true, name: true, emergencyStatus: true, verificationStatus: true }
         }
       }
     });
@@ -113,6 +126,7 @@ const authService = {
       throw err;
     }
 
+    user.role = normalizeRole(user.role, user.email);
     return user;
   }
 };

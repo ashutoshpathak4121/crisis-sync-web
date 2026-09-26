@@ -12,6 +12,9 @@ const ambulanceRoutes = require('./routes/ambulanceRoutes');
 const incidentRoutes = require('./routes/incidentRoutes');
 const routeRoutes = require('./routes/routeRoutes');
 const simulationRoutes = require('./routes/simulationRoutes');
+const userPortalRoutes = require('./routes/userPortalRoutes');
+const hospitalPortalRoutes = require('./routes/hospitalPortalRoutes');
+const adminPortalRoutes = require('./routes/adminPortalRoutes');
 
 const app = express();
 
@@ -62,6 +65,9 @@ app.get('/api/health', (req, res) => {
 
 // Mount modular API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userPortalRoutes);
+app.use('/api/hospital', hospitalPortalRoutes);
+app.use('/api/admin', adminPortalRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/ambulances', ambulanceRoutes);
 app.use('/api/incidents', incidentRoutes);

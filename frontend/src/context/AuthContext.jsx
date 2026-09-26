@@ -56,9 +56,10 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAuthenticated: !!user,
-        isAdmin: user?.role === 'ADMIN',
-        isHospital: user?.role === 'HOSPITAL',
-        isParamedic: user?.role === 'PARAMEDIC'
+        isAdmin: ['ADMIN', 'SUPER_ADMIN'].includes(user?.role),
+        isHospital: ['HOSPITAL', 'HOSPITAL_ADMIN'].includes(user?.role),
+        isParamedic: ['PARAMEDIC', 'HOSPITAL_STAFF'].includes(user?.role),
+        isCitizen: ['USER', 'CITIZEN'].includes(user?.role) || !user
       }}
     >
       {children}

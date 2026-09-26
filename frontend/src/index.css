@@ -10,10 +10,16 @@
   }
 
   body {
-    background-color: #050811;
-    color: #F8FAFC;
+    background-color: #F1F5F9;
+    color: #0F172A;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .dark body {
+    background-color: #030712;
+    color: #F8FAFC;
     background-image: 
       radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 60%),
       radial-gradient(ellipse at 100% 100%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
@@ -32,37 +38,80 @@
 }
 
 @layer components {
-  /* Glassmorphism 2.0 & Cockpit Surface Tokens */
+  /* Ultra-Aesthetic Cyber-Glass & Frosted Translucency Tokens */
   .glass-panel {
-    background: rgba(12, 19, 34, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+    background: rgba(10, 16, 30, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  .light .glass-panel {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.06), inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
   }
 
   .glass-panel-elevated {
-    background: rgba(15, 24, 43, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(6, 182, 212, 0.22);
-    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(6, 182, 212, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(6, 182, 212, 0.28);
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), 0 0 25px -5px rgba(6, 182, 212, 0.2), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .light .glass-panel-elevated {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.08), 0 0 20px -5px rgba(6, 182, 212, 0.15);
   }
 
   .glass-card {
-    background: rgba(14, 23, 40, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .light .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
   }
 
   .glass-card:hover {
-    border-color: rgba(6, 182, 212, 0.4);
-    background: rgba(18, 29, 50, 0.85);
+    border-color: rgba(6, 182, 212, 0.5);
+    background: rgba(20, 32, 56, 0.55);
     transform: translateY(-2px);
-    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5), 0 0 25px -5px rgba(6, 182, 212, 0.2);
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.55), 0 0 28px -5px rgba(6, 182, 212, 0.25);
+  }
+
+  .light .glass-card:hover {
+    border-color: rgba(6, 182, 212, 0.6);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.1), 0 0 18px -3px rgba(6, 182, 212, 0.2);
+  }
+
+  .cyber-pill {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  }
+
+  .cyber-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(6, 182, 212, 0.4);
   }
 
   /* Tactical Crosshair Background Corner Accents */
@@ -112,9 +161,41 @@
     border: 1px solid #1E2E48 !important;
   }
 
+  .light .leaflet-popup-content-wrapper {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
+    border: 1px solid #CBD5E1 !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .light .leaflet-popup-tip {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+  }
+
+  .light .google-popup-card {
+    color: #0F172A !important;
+  }
+
+  .light .google-popup-card h4 {
+    color: #0F172A !important;
+  }
+
+  .light .google-popup-card .metric-box {
+    background-color: #F1F5F9 !important;
+  }
+
+  .light .google-popup-card strong {
+    color: #0F172A !important;
+  }
+
   .leaflet-container {
-    background-color: #080C15 !important;
+    background-color: #E5E7EB !important;
     font-family: inherit !important;
+  }
+
+  .google-pin-container {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
   }
 }
 
@@ -191,4 +272,37 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(6, 182, 212, 0.4);
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 53, 222, 0.5);
+}
+
+/* Reference Image Soft Neumorphic & Clay Elevations */
+.soft-white-card {
+  background: #ffffff;
+  box-shadow: 0 10px 30px -5px rgba(45, 30, 95, 0.05), 0 4px 12px -2px rgba(45, 30, 95, 0.02);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .soft-white-card {
+  background: #0D1527;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.soft-elevated-pill {
+  background: #ffffff;
+  box-shadow: 0 14px 35px -6px rgba(79, 53, 222, 0.12), 0 4px 12px -2px rgba(79, 53, 222, 0.06);
+  border: 1px solid rgba(238, 242, 255, 0.9);
+}
+
+.dark .soft-elevated-pill {
+  background: #111A2E;
+  box-shadow: 0 14px 35px -6px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }

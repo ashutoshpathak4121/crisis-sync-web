@@ -81,6 +81,42 @@ const emitSimulationTick = (tickData) => {
   });
 };
 
+const emitAdmissionRequestCreated = (payload) => {
+  if (!ioInstance) return;
+  logger.info(`[Socket Broadcast] admission:created -> Request ${payload.id} for Hospital ${payload.hospitalId}`);
+  ioInstance.emit('admission:created', {
+    ...payload,
+    timestamp: new Date().toISOString()
+  });
+};
+
+const emitAdmissionRequestUpdated = (payload) => {
+  if (!ioInstance) return;
+  logger.info(`[Socket Broadcast] admission:updated -> Request ${payload.id} : ${payload.status}`);
+  ioInstance.emit('admission:updated', {
+    ...payload,
+    timestamp: new Date().toISOString()
+  });
+};
+
+const emitEmergencyRequestCreated = (payload) => {
+  if (!ioInstance) return;
+  logger.info(`[Socket Broadcast] emergency:created -> Emergency ${payload.id} (${payload.acuity})`);
+  ioInstance.emit('emergency:created', {
+    ...payload,
+    timestamp: new Date().toISOString()
+  });
+};
+
+const emitCrisisEventUpdated = (payload) => {
+  if (!ioInstance) return;
+  logger.info(`[Socket Broadcast] crisis:updated -> ${payload.title} (${payload.status})`);
+  ioInstance.emit('crisis:updated', {
+    ...payload,
+    timestamp: new Date().toISOString()
+  });
+};
+
 module.exports = {
   initSocketEmitter,
   getIO,
@@ -91,5 +127,9 @@ module.exports = {
   emitIncidentCreated,
   emitIncidentUpdated,
   emitAlert,
-  emitSimulationTick
+  emitSimulationTick,
+  emitAdmissionRequestCreated,
+  emitAdmissionRequestUpdated,
+  emitEmergencyRequestCreated,
+  emitCrisisEventUpdated
 };

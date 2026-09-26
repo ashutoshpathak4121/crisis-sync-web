@@ -24,15 +24,15 @@ const HospitalTable = ({
   });
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#0B1324]/85 backdrop-blur-xl overflow-hidden shadow-xl">
+    <div className="rounded-[28px] border border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-slate-900/40 backdrop-blur-2xl overflow-hidden shadow-lg shadow-slate-200/40 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4)]">
       {/* Header & Controls */}
-      <div className="p-4 sm:p-5 border-b border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/[0.01]">
+      <div className="p-4 sm:p-5 border-b border-slate-200/80 dark:border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50 dark:bg-white/[0.01]">
         <div>
-          <h4 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
-            <Activity className="w-4 h-4 text-cyan-400" />
+          <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide flex items-center gap-2 font-['Outfit']">
+            <Activity className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
             Hospital Capacity Telemetry Matrix
           </h4>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Real-time synchronization across {hospitals.length} regional trauma centers
           </p>
         </div>
@@ -46,7 +46,7 @@ const HospitalTable = ({
               placeholder="Search facility..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#060B16] border border-white/[0.1] rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:border-cyan-400 focus:shadow-glow-cyan focus:outline-none w-48 transition-all"
+              className="bg-white dark:bg-[#060B16] border border-slate-200 dark:border-white/[0.1] rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none w-48 transition-all shadow-sm"
             />
           </div>
 
@@ -54,7 +54,7 @@ const HospitalTable = ({
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="bg-[#060B16] border border-white/[0.1] rounded-xl px-3 py-1.5 text-xs text-slate-300 focus:border-cyan-400 focus:outline-none transition-all cursor-pointer"
+            className="bg-white dark:bg-[#060B16] border border-slate-200 dark:border-white/[0.1] rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-300 focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none transition-all cursor-pointer shadow-sm"
           >
             <option value="ALL">All Statuses</option>
             <option value="ACCEPTING">Accepting Only</option>
@@ -69,7 +69,7 @@ const HospitalTable = ({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-b border-white/[0.06] bg-white/[0.02] text-slate-400 uppercase tracking-wider text-[10px] font-mono">
+            <tr className="border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/60 dark:bg-white/[0.02] text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-mono">
               <th className="py-3.5 px-4 font-semibold">Facility Name</th>
               <th className="py-3.5 px-4 font-semibold">Status</th>
               <th className="py-3.5 px-4 font-semibold">Emergency Beds</th>
@@ -78,7 +78,7 @@ const HospitalTable = ({
               <th className="py-3.5 px-4 font-semibold text-right">Telemetry Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.04]">
+          <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
             {filteredHospitals.map((h) => {
               const res = h.resources || {};
               const erAvail = res.emergencyBedsAvailable !== undefined ? res.emergencyBedsAvailable : 0;
@@ -94,15 +94,15 @@ const HospitalTable = ({
                   key={h.id}
                   className={`transition-colors duration-200 ${
                     isRecentlyUpdated
-                      ? 'flash-update bg-cyan-950/40'
+                      ? 'flash-update bg-cyan-100/50 dark:bg-cyan-950/40'
                       : isSelected
-                      ? 'bg-cyan-500/10'
-                      : 'hover:bg-white/[0.03]'
+                      ? 'bg-cyan-50 dark:bg-cyan-500/10'
+                      : 'hover:bg-slate-50 dark:hover:bg-white/[0.03]'
                   }`}
                 >
                   <td className="py-3.5 px-4">
-                    <span className="font-bold text-white block tracking-tight text-xs sm:text-sm">{h.name}</span>
-                    <span className="text-[11px] text-slate-400 truncate max-w-[220px] block mt-0.5">
+                    <span className="font-bold text-slate-900 dark:text-white block tracking-tight text-xs sm:text-sm font-['Outfit']">{h.name}</span>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-[220px] block mt-0.5">
                       {h.address}
                     </span>
                   </td>
@@ -112,12 +112,12 @@ const HospitalTable = ({
                   <td className="py-3.5 px-4">
                     <div className="space-y-1">
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className={`font-bold ${erAvail <= 2 ? 'text-red-400' : 'text-emerald-400'}`}>
+                        <span className={`font-bold ${erAvail <= 2 ? 'text-red-500 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                           {erAvail} / {erTotal} beds
                         </span>
-                        <span className="text-[10px] text-slate-400">{erPct}%</span>
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400">{erPct}%</span>
                       </div>
-                      <div className="w-24 h-1.5 rounded-full bg-slate-800/80 overflow-hidden">
+                      <div className="w-24 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800/80 overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${
                             erAvail <= 2
@@ -132,11 +132,11 @@ const HospitalTable = ({
                     </div>
                   </td>
                   <td className="py-3.5 px-4 font-mono">
-                    <span className={res.icuBedsAvailable === 0 ? 'text-red-400 font-bold' : 'text-slate-200'}>
+                    <span className={res.icuBedsAvailable === 0 ? 'text-red-500 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200'}>
                       {res.icuBedsAvailable || 0} / {res.icuBedsTotal || 10}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-slate-200">
+                  <td className="py-3.5 px-4 font-mono text-slate-800 dark:text-slate-200">
                     {res.ventilatorsAvailable || 0} / {res.ventilatorsTotal || 6}
                   </td>
                   <td className="py-3.5 px-4 text-right">
@@ -147,7 +147,7 @@ const HospitalTable = ({
                         className={`inline-flex items-center gap-1 text-[11px] font-bold py-1.5 px-2.5 rounded-xl border transition-all active:scale-95 shadow-sm ${
                           isSelected
                             ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-extrabold shadow-glow-cyan'
-                            : 'text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 hover:border-cyan-400'
+                            : 'text-cyan-700 dark:text-cyan-400 hover:text-cyan-900 dark:hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-400/40 hover:border-cyan-400'
                         }`}
                         title="Locate facility, center camera and display live HUD on tactical map"
                       >
@@ -158,7 +158,7 @@ const HospitalTable = ({
                       {/* Action 2: Attach / Dispatch Ambulance to this facility */}
                       {onAttachHospital && (
                         isRouted ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1.5 rounded-xl font-mono">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 border border-emerald-400/40 px-2.5 py-1.5 rounded-xl font-mono">
                             <Check className="w-3 h-3" />
                             <span>Routed</span>
                           </span>
@@ -168,8 +168,8 @@ const HospitalTable = ({
                             disabled={isAttaching || h.emergencyStatus === 'FULL'}
                             className={`inline-flex items-center gap-1 text-[11px] font-bold py-1.5 px-2.5 rounded-xl border transition-all active:scale-95 shadow-sm ${
                               h.emergencyStatus === 'FULL'
-                                ? 'opacity-40 cursor-not-allowed text-slate-500 border-white/[0.06] bg-white/[0.02]'
-                                : 'text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 hover:border-emerald-400'
+                                ? 'opacity-40 cursor-not-allowed text-slate-400 dark:text-slate-500 border-slate-200 dark:border-white/[0.06] bg-slate-100 dark:bg-white/[0.02]'
+                                : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-400/40 hover:border-emerald-400'
                             }`}
                             title={
                               h.emergencyStatus === 'FULL'

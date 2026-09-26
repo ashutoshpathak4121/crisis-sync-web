@@ -58,21 +58,21 @@ const StatCard = ({
   return (
     <div
       onClick={onClick}
-      className={`relative overflow-hidden rounded-2xl border bg-gradient-to-b from-[#0F1829]/90 to-[#0A101D]/90 backdrop-blur-xl p-4 sm:p-5 transition-all duration-300 group ${
+      className={`relative overflow-hidden rounded-2xl border bg-white/85 dark:bg-gradient-to-b dark:from-[#0F1829]/90 dark:to-[#0A101D]/90 backdrop-blur-xl p-4 sm:p-5 transition-all duration-300 shadow-md shadow-slate-200/40 dark:shadow-none group ${
         c.border
       } ${c.glow} ${
         onClick ? 'cursor-pointer hover:scale-[1.02] hover:-translate-y-0.5' : ''
       } ${highlight ? 'ring-2 ring-cyan-400 shadow-glow-cyan' : ''}`}
     >
       {/* Top micro light reflection */}
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
 
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
-          <p className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-400">
+          <p className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             {title}
           </p>
-          <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight font-mono text-white`}>
+          <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight font-mono text-slate-900 dark:text-white`}>
             {value}
           </h3>
         </div>
@@ -87,16 +87,16 @@ const StatCard = ({
       </div>
 
       {(subtitle || trend) && (
-        <div className="mt-3.5 pt-2.5 border-t border-white/[0.04] flex items-center justify-between text-xs">
+        <div className="mt-3.5 pt-2.5 border-t border-slate-200/80 dark:border-white/[0.04] flex items-center justify-between text-xs">
           {subtitle && (
-            <span className="text-[11px] text-slate-400 font-medium truncate">{subtitle}</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">{subtitle}</span>
           )}
           {trend && (
             <span
               className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${
                 trend > 0
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                  : 'text-red-400 border-red-500/20 bg-red-500/10'
+                  ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20'
+                  : 'text-red-600 dark:text-red-400 border-red-500/20 bg-red-500/10'
               }`}
             >
               {trend > 0 ? `+${trend}%` : `${trend}%`}

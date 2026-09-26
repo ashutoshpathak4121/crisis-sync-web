@@ -8,34 +8,48 @@ generator client {
 }
 
 model User {
-  id           String              @id @default(uuid())
-  name         String
-  email        String              @unique
-  passwordHash String
-  role         String              @default("PARAMEDIC") // ADMIN, HOSPITAL, PARAMEDIC
-  hospitalId   String?
-  hospital     Hospital?           @relation(fields: [hospitalId], references: [id])
-  ambulances   Ambulance[]
-  auditLogs    ResourceUpdateLog[]
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
+  id                String              @id @default(uuid())
+  name              String
+  email             String              @unique
+  passwordHash      String
+  role              String              @default("USER") // USER, HOSPITAL_STAFF, HOSPITAL_ADMIN, SUPER_ADMIN, PARAMEDIC, ADMIN, HOSPITAL
+  phone             String?
+  hospitalId        String?
+  hospital          Hospital?           @relation(fields: [hospitalId], references: [id])
+  ambulances        Ambulance[]
+  admissionRequests AdmissionRequest[]
+  emergencyRequests EmergencyRequest[]
+  resourceLogs      ResourceUpdateLog[]
+  auditLogs         AuditLog[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 }
 
 model Hospital {
-  id              String              @id @default(uuid())
-  name            String
-  address         String
-  latitude        Float
-  longitude       Float
-  phone           String
-  emergencyStatus String              @default("ACCEPTING") // ACCEPTING, LIMITED, CRITICAL, FULL, OFFLINE
-  staff           User[]
-  resources       HospitalResource?
-  routes          Route[]
-  auditLogs       ResourceUpdateLog[]
-  ambulances      Ambulance[]         @relation("DestinationHospital")
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime            @updatedAt
+  id                 String              @id @default(uuid())
+  name               String
+  address            String
+  latitude           Float
+  longitude          Float
+  phone              String
+  emergencyStatus    String              @default("ACCEPTING") // ACCEPTING, LIMITED, CRITICAL, FULL, OFFLINE
+  verificationStatus String              @default("VERIFIED") // PENDING, VERIFIED, REJECTED, SUSPENDED
+  registrationNumber String?
+  hospitalType       String              @default("TRAUMA_CENTER") // GENERAL, TRAUMA_CENTER, SUPER_SPECIALTY, DISTRICT, PEDIATRIC
+  contactEmail       String?
+  documentsUrl       String?
+  verifiedAt         DateTime?
+  verifiedBy         String?
+  staff              User[]
+  resources          HospitalResource?
+  routes             Route[]
+  resourceLogs       ResourceUpdateLog[]
+  ambulances         Ambulance[]         @relation("DestinationHospital")
+  admissionRequests  AdmissionRequest[]
+  patients           Patient[]
+  auditLogs          AuditLog[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }
 
 model HospitalResource {
@@ -107,4 +121,100 @@ model ResourceUpdateLog {
   oldValue     Int
   newValue     Int
   timestamp    DateTime @default(now())
+}
+
+model AdmissionRequest {
+  id              String    @id @default(uuid())
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id])
+  hospitalId      String
+  hospital        Hospital  @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  patientName     String
+  age             Int
+  gender          String?   @default("Unspecified")
+  contactPhone    String
+  condition       String
+  triageLevel     String    @default("2 - High") // 1 - Critical, 2 - High, 3 - Medium, 4 - Low
+  bedType         String    @default("ICU Bed") // Emergency Bed, ICU Bed, Ventilator Bed, Oxygen Bed, Isolation Bed
+  status          String    @default("PENDING") // PENDING, ACCEPTED, REJECTED, COMPLETED
+  notes           String?
+  rejectionReason String?
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model EmergencyRequest {
+  id                 String    @id @default(uuid())
+  userId             String?
+  user               User?     @relation(fields: [userId], references: [id])
+  patientName        String
+  contactPhone       String
+  latitude           Float
+  longitude          Float
+  locationAddress    String
+  emergencyType      String    // Cardiac, Trauma, Respiratory, Stroke, Pregnancy, Other
+  acuity             String    @default("CRITICAL") // CRITICAL, URGENT, STABLE
+  status             String    @default("PENDING") // PENDING, DISPATCHED, EN_ROUTE, ARRIVED, RESOLVED, CANCELLED
+  assignedHospitalId String?
+  assignedAmbulanceId String?
+  notes              String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model CrisisEvent {
+  id                   String    @id @default(uuid())
+  title                String
+  type                 String    @default("REGIONAL_EMERGENCY") // PANDEMIC, NATURAL_DISASTER, MASS_ACCIDENT, EPIDEMIC, REGIONAL_EMERGENCY, OTHER
+  severity             String    @default("HIGH") // LOW, MEDIUM, HIGH, CRITICAL
+  status               String    @default("ACTIVE") // ACTIVE, CONTAINED, RESOLVED
+  affectedRegion       String    // e.g. "Delhi NCR", "South Delhi", "Gurugram Hub"
+  description          String
+  activeHospitalsCount Int       @default(0)
+  demandedBeds         Int       @default(0)
+  demandedVentilators  Int       @default(0)
+  createdBy            String?
+  startedAt            DateTime  @default(now())
+  resolvedAt           DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model Patient {
+  id               String    @id @default(uuid())
+  hospitalId       String
+  hospital         Hospital  @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  name             String
+  age              Int
+  gender           String    @default("Other")
+  triageLevel      String    @default("2 - High")
+  bedType          String    @default("ICU Bed")
+  ward             String    @default("Emergency Ward A")
+  condition        String
+  status           String    @default("ADMITTED") // ADMITTED, IN_SURGERY, RECOVERING, DISCHARGED, TRANSFERRED
+  admittedAt       DateTime  @default(now())
+  dischargedAt     DateTime?
+  attendingDoctor  String?   @default("Dr. On Call")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model AuditLog {
+  id            String    @id @default(uuid())
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id])
+  userName      String?
+  userRole      String?
+  hospitalId    String?
+  hospital      Hospital? @relation(fields: [hospitalId], references: [id])
+  action        String    // CAPACITY_UPDATE, ADMISSION_DECISION, HOSPITAL_VERIFY, CRISIS_TRIGGER, USER_ROLE_CHANGE
+  entityType    String    // HOSPITAL, BED, ADMISSION_REQUEST, CRISIS, USER
+  entityId      String?
+  previousValue String?
+  newValue      String?
+  details       String?
+  ipAddress     String?
+  createdAt     DateTime  @default(now())
 }

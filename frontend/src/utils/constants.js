@@ -87,14 +87,24 @@ export const INCIDENT_SEVERITY = {
 export const DEMO_USERS = [
   {
     role: 'ADMIN',
+    title: 'Healthcare Operator',
+    name: 'Ashutosh Pathak',
+    email: 'ashutosh@crisissync.demo',
+    password: 'DemoPassword123!',
+    description: 'Lead Healthcare Operator with full administrative and triage clearance.'
+  },
+  {
+    role: 'ADMIN',
     title: 'Command Center Dispatcher',
+    name: 'Commander Vikram Rao',
     email: 'admin@crisissync.demo',
     password: 'DemoPassword123!',
     description: 'Full strategic city-wide oversight, simulation controls, and incident triage.'
   },
   {
     role: 'HOSPITAL',
-    title: 'Hospital / ER Nurse',
+    title: 'Hospital / ER Chief',
+    name: 'Dr. Aris Thorne (Chief Medical Officer)',
     email: 'hospital@crisissync.demo',
     password: 'DemoPassword123!',
     description: 'Instant live resource controls for Apollo Emergency Trauma Center.'
@@ -102,8 +112,31 @@ export const DEMO_USERS = [
   {
     role: 'PARAMEDIC',
     title: 'Ambulance / Paramedic',
+    name: 'Paramedic Rohan Sharma',
     email: 'paramedic@crisissync.demo',
     password: 'DemoPassword123!',
     description: 'Real-time hospital capacity map, route navigation, and smart recommendation.'
+  },
+  {
+    role: 'USER',
+    title: 'Public Citizen / Patient',
+    name: 'Aarav Sharma (Citizen / Patient)',
+    email: 'user@crisissync.demo',
+    password: 'DemoPassword123!',
+    description: 'Public emergency portal: check live hospital availability, SOS, and emergency requests.'
   }
 ];
+
+export const getRoleDestination = (role) => {
+  if (['ADMIN', 'SUPER_ADMIN'].includes(role)) {
+    return '/command';
+  }
+  if (['HOSPITAL', 'HOSPITAL_ADMIN'].includes(role)) {
+    return '/hospital';
+  }
+  if (['PARAMEDIC', 'HOSPITAL_STAFF'].includes(role)) {
+    return '/ambulance';
+  }
+  return '/overview';
+};
+

@@ -9,7 +9,8 @@ const env = {
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '24h',
   CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173',
   MAPBOX_ACCESS_TOKEN: process.env.MAPBOX_ACCESS_TOKEN || '',
-  DEMO_PASSWORD: process.env.DEMO_PASSWORD || 'DemoPassword123!'
+  DEMO_PASSWORD: process.env.DEMO_PASSWORD || 'DemoPassword123!',
+  SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL || 'admin@crisissync.demo'
 };
 
 module.exports = env;
