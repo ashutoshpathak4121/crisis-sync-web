@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { DonutCapacityChart } from './CrisisCharts';
 
-const HOSPITALS_LIST = [
+const DEFAULT_HOSPITALS = [
   {
     id: 'aiims',
     name: 'AIIMS Delhi',
@@ -86,28 +86,28 @@ const ALERTS_DATA = [
     title: 'Fortis Hospital ICU occupancy above 90%',
     time: '12 min ago',
     type: 'critical',
-    badgeClass: 'bg-rose-50 text-rose-600 border-rose-200'
+    badgeClass: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60'
   },
   {
     id: 2,
     title: 'Ambulance ETA updated (DL-4587)',
     time: '16 min ago',
     type: 'ambulance',
-    badgeClass: 'bg-blue-50 text-blue-600 border-blue-200'
+    badgeClass: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60'
   },
   {
     id: 3,
     title: 'Rapid increase in cases - Delhi NCR',
     time: '32 min ago',
     type: 'warning',
-    badgeClass: 'bg-amber-50 text-amber-600 border-amber-200'
+    badgeClass: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60'
   },
   {
     id: 4,
     title: 'Medanta Hospital has 2 ventilator beds available',
     time: '47 min ago',
     type: 'success',
-    badgeClass: 'bg-emerald-50 text-emerald-600 border-emerald-200'
+    badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60'
   }
 ];
 
@@ -115,78 +115,100 @@ const RightPanel = ({
   onSelectHospital,
   onOpenPatientModal,
   onReserveHospital,
-  onQuickAction
+  onQuickAction,
+  hospitals: propHospitals
 }) => {
   const [isolationChecked, setIsolationChecked] = useState(true);
   const [specialistChecked, setSpecialistChecked] = useState(true);
   const [radius, setRadius] = useState('Within 25 km');
 
+  // Format hospital list from real props or fallback
+  const displayHospitals = (propHospitals && propHospitals.length > 0)
+    ? propHospitals.slice(0, 5).map((h) => {
+        const erAvail = h.resources?.emergencyBedsAvailable ?? 10;
+        const isCritical = h.emergencyStatus === 'FULL' || erAvail === 0;
+        const isGood = h.emergencyStatus === 'ACCEPTING';
+        return {
+          id: h.id,
+          name: h.name,
+          distance: h.distance || '8.2 km',
+          eta: h.eta || '18 min',
+          status: isCritical ? 'Critical' : isGood ? 'Good' : 'Moderate',
+          statusColor: isCritical ? 'rose' : isGood ? 'emerald' : 'amber',
+          ventilatorsAvailable: h.resources?.oxygenBedsAvailable ?? 6,
+          isolation: true,
+          action: isCritical ? 'disabled' : 'reserve',
+          rawHospital: h
+        };
+      })
+    : DEFAULT_HOSPITALS;
+
   return (
-    <div className="space-y-5">
-      {/* 1. Emergency Match Widget (Frosted Glass Iris Violet) */}
-      <div className="rounded-[28px] p-5 sm:p-6 bg-indigo-50/90 dark:bg-indigo-950/30 backdrop-blur-2xl border border-indigo-200/80 dark:border-indigo-500/25 shadow-lg shadow-indigo-100/50 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4),0_0_20px_rgba(99,102,241,0.12)] hover:-translate-y-1 hover:border-indigo-400/50 transition-all duration-300">
-        <div className="flex items-center justify-between gap-2 mb-4">
+    <div className="space-y-4">
+      {/* 1. Emergency Match Widget */}
+      <div className="rounded-xl p-4 sm:p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 flex items-center justify-center shadow-md border border-indigo-400/30">
-              <Radio className="w-4 h-4 animate-pulse text-indigo-500 dark:text-indigo-400" />
+            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-200 dark:border-blue-800/60">
+              <Radio className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white font-['Outfit']">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                 Emergency Match
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-indigo-200/70 font-medium">Find hospitals with required facilities</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Find facilities by patient requirements</p>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-rose-500/15 dark:bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-300 dark:border-rose-400/40 shadow-sm">
+          <span className="px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60">
             Triage 2 - High
           </span>
         </div>
 
         {/* Patient Needs */}
-        <div className="space-y-2.5 pt-1">
+        <div className="space-y-2 pt-1">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-slate-800 dark:text-slate-200 font-bold">+ Patient Needs</span>
-            <span className="text-indigo-600 dark:text-indigo-300/70 text-[11px] font-semibold">Requirements</span>
+            <span className="text-slate-700 dark:text-slate-300 font-semibold">Required Care</span>
+            <span className="text-blue-600 dark:text-blue-400 text-[11px] font-medium">Criteria</span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/90 dark:bg-white/[0.05] border border-indigo-200 dark:border-indigo-400/30 text-slate-800 dark:text-slate-100 font-bold text-xs backdrop-blur-md shadow-sm">
-              <Bed className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium">
+              <Bed className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
               <span>ICU Bed</span>
-              <span className="text-rose-600 dark:text-rose-400 font-black">+ Ventilator</span>
+              <span className="text-rose-600 dark:text-rose-400 font-semibold">+ Ventilator</span>
             </div>
 
-            <div className="space-y-1 text-xs text-slate-700 dark:text-slate-300">
+            <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={isolationChecked}
                   onChange={(e) => setIsolationChecked(e.target.checked)}
-                  className="rounded border-slate-300 dark:border-white/20 bg-white dark:bg-white/10 text-cyan-600 dark:text-cyan-500 focus:ring-cyan-500 w-3.5 h-3.5"
+                  className="rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5 cursor-pointer"
                 />
-                <span className="text-[11px] font-semibold">Isolation (if available)</span>
+                <span className="text-[11px] font-medium">Isolation (if available)</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={specialistChecked}
                   onChange={(e) => setSpecialistChecked(e.target.checked)}
-                  className="rounded border-slate-300 dark:border-white/20 bg-white dark:bg-white/10 text-cyan-600 dark:text-cyan-500 focus:ring-cyan-500 w-3.5 h-3.5"
+                  className="rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5 cursor-pointer"
                 />
-                <span className="text-[11px] font-semibold">Critical Specialist</span>
+                <span className="text-[11px] font-medium">Critical Specialist</span>
               </label>
             </div>
           </div>
         </div>
 
         {/* Location Selector */}
-        <div className="mt-4 pt-3.5 border-t border-indigo-100 dark:border-white/[0.08]">
-          <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1.5 uppercase tracking-wide">
-            Location Radius
+        <div className="mt-3.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">
+            Search Radius
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/90 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 text-xs text-slate-800 dark:text-slate-200 font-semibold shadow-sm backdrop-blur-md">
-              <MapPin className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium">
+              <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
               <span className="truncate">Current Location</span>
             </div>
 
@@ -194,7 +216,7 @@ const RightPanel = ({
               <select
                 value={radius}
                 onChange={(e) => setRadius(e.target.value)}
-                className="w-full appearance-none px-3 py-2 pr-8 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 text-xs text-slate-800 dark:text-slate-200 font-semibold focus:outline-none focus:border-cyan-500 dark:focus:border-cyan-400 cursor-pointer shadow-sm backdrop-blur-md"
+                className="w-full appearance-none px-3 py-1.5 pr-8 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:border-blue-500 cursor-pointer"
               >
                 <option value="Within 10 km">Within 10 km</option>
                 <option value="Within 25 km">Within 25 km</option>
@@ -206,67 +228,75 @@ const RightPanel = ({
         </div>
       </div>
 
-      {/* 2. Hospitals with Available Beds (Frosted Glass Seafoam Emerald) */}
-      <div className="rounded-[28px] p-5 sm:p-6 bg-white/85 dark:bg-slate-900/40 backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-lg shadow-slate-200/40 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:border-cyan-400/40 transition-all duration-300">
-        <div className="flex items-center justify-between mb-4">
+      {/* 2. Hospitals with Available Beds */}
+      <div className="rounded-xl p-4 sm:p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-white font-['Outfit']">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               Hospitals with Available Beds
             </h3>
-            <span className="flex items-center gap-1 text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 px-2 py-0.5 rounded-full border border-emerald-400/30 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" /> Live
+            <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/60">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Live
             </span>
           </div>
         </div>
 
-        <div className="space-y-3">
-          {HOSPITALS_LIST.map((hosp) => (
+        <div className="space-y-2">
+          {displayHospitals.map((hosp) => (
             <div
               key={hosp.id}
-              onClick={() => onSelectHospital && onSelectHospital(hosp)}
-              className="group flex items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-200/80 dark:border-white/[0.08] hover:border-cyan-400/40 bg-slate-50/80 dark:bg-white/[0.03] hover:bg-slate-100/90 dark:hover:bg-white/[0.07] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer backdrop-blur-md"
+              role="button"
+              tabIndex={0}
+              onClick={() => onSelectHospital && onSelectHospital(hosp.rawHospital || hosp)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onSelectHospital && onSelectHospital(hosp.rawHospital || hosp);
+                }
+              }}
+              className="group flex items-center justify-between gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/50 hover:border-blue-500/40 dark:hover:border-blue-500/40 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border shadow-sm ${
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
                     hosp.statusColor === 'emerald'
-                      ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-400/40'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60'
                       : hosp.statusColor === 'amber'
-                      ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-400/40'
-                      : 'bg-rose-500/20 text-rose-700 dark:text-rose-300 border-rose-400/40'
+                      ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60'
+                      : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60'
                   }`}
                 >
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
+                    <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {hosp.name}
                     </h4>
                     <span
-                      className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold border ${
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-semibold border ${
                         hosp.statusColor === 'emerald'
-                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-400/30'
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60'
                           : hosp.statusColor === 'amber'
-                          ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-400/30'
-                          : 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-400/30'
+                          ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60'
+                          : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60'
                       }`}
                     >
-                      {hosp.status === 'Good' ? '+ Good' : hosp.status}
+                      {hosp.status === 'Good' ? 'Good' : hosp.status}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-medium flex-wrap">
-                    <span className="shrink-0">{hosp.distance} • {hosp.eta}</span>
-                    <span className="shrink-0 text-slate-300 dark:text-slate-700">•</span>
-                    <span className="flex items-center gap-1 text-cyan-600 dark:text-cyan-400 font-bold shrink-0">
-                      <Wind className="w-3 h-3" /> Vent: {hosp.ventilatorsAvailable}
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium flex-wrap">
+                    <span className="shrink-0 font-mono">{hosp.distance} • {hosp.eta}</span>
+                    <span className="shrink-0 text-slate-300 dark:text-slate-600">•</span>
+                    <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300 font-semibold shrink-0">
+                      <Wind className="w-3 h-3 text-blue-600 dark:text-blue-400" /> Vent: <span className="font-mono">{hosp.ventilatorsAvailable}</span>
                     </span>
-                    <span className="shrink-0 text-slate-300 dark:text-slate-700">•</span>
-                    <span className="flex items-center gap-0.5 font-semibold shrink-0">
+                    <span className="shrink-0 text-slate-300 dark:text-slate-600">•</span>
+                    <span className="flex items-center gap-0.5 font-medium shrink-0">
                       {hosp.isolation ? (
-                        <CheckCircle2 className="w-3 h-3 text-emerald-500 dark:text-emerald-400" />
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       ) : (
-                        <XCircle className="w-3 h-3 text-rose-500 dark:text-rose-400" />
+                        <XCircle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                       )}
                       <span>Isolation</span>
                     </span>
@@ -280,9 +310,9 @@ const RightPanel = ({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onReserveHospital && onReserveHospital(hosp);
+                      onReserveHospital && onReserveHospital(hosp.rawHospital || hosp);
                     }}
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-cyan-600 dark:bg-cyan-500/20 hover:bg-cyan-500 dark:hover:bg-cyan-500/30 border border-cyan-500/50 dark:border-cyan-400/40 shadow-sm transition-all"
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors cursor-pointer"
                   >
                     Reserve Bed
                   </button>
@@ -290,16 +320,16 @@ const RightPanel = ({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      onReserveHospital && onReserveHospital(hosp);
+                      onReserveHospital && onReserveHospital(hosp.rawHospital || hosp);
                     }}
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-white/20 hover:border-cyan-400 text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white bg-white dark:bg-white/[0.05] hover:bg-slate-100 dark:hover:bg-white/[0.1] shadow-sm transition-all"
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
                   >
                     Request Bed
                   </button>
                 ) : (
                   <button
                     disabled
-                    className="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-slate-100 dark:bg-white/[0.03] text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-white/[0.06] cursor-not-allowed"
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700 cursor-not-allowed"
                   >
                     No Beds
                   </button>
@@ -310,37 +340,37 @@ const RightPanel = ({
         </div>
       </div>
 
-      {/* 3. Live Capacity Overview Widget (Frosted Glass Cyan & Ocean) */}
-      <div className="rounded-[28px] p-5 sm:p-6 bg-white/85 dark:bg-slate-900/40 backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-lg shadow-slate-200/40 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:border-cyan-400/40 transition-all duration-300">
-        <h3 className="text-sm font-extrabold text-slate-900 dark:text-white font-['Outfit'] mb-2">
+      {/* 3. Live Capacity Overview Widget */}
+      <div className="rounded-xl p-4 sm:p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2">
           Live Capacity Overview
         </h3>
         <DonutCapacityChart />
       </div>
 
-      {/* 4. Recent Alerts (Frosted Glass Amber Gold) */}
-      <div className="rounded-[28px] p-5 sm:p-6 bg-white/85 dark:bg-slate-900/40 backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-lg shadow-slate-200/40 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:border-amber-400/40 transition-all duration-300">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-extrabold text-slate-900 dark:text-white font-['Outfit']">
+      {/* 4. Recent Alerts */}
+      <div className="rounded-xl p-4 sm:p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
             Recent Alerts
           </h3>
           <button
             onClick={() => onQuickAction && onQuickAction('alerts')}
-            className="text-xs font-extrabold text-amber-600 dark:text-amber-300 hover:underline cursor-pointer"
+            className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
           >
             View All
           </button>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {ALERTS_DATA.map((alert) => (
             <div
               key={alert.id}
-              className="flex items-start justify-between gap-3 p-3 rounded-2xl bg-slate-50/80 dark:bg-white/[0.03] hover:bg-slate-100/90 dark:hover:bg-white/[0.07] border border-slate-200/80 dark:border-white/[0.08] hover:border-amber-400/40 shadow-sm text-xs transition-colors backdrop-blur-md"
+              className="flex items-start justify-between gap-3 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-xs"
             >
               <div className="flex items-start gap-2.5">
                 <div
-                  className={`w-6 h-6 rounded-lg flex items-center justify-center mt-0.5 shrink-0 border ${alert.badgeClass}`}
+                  className={`w-6 h-6 rounded-md flex items-center justify-center mt-0.5 shrink-0 border ${alert.badgeClass}`}
                 >
                   {alert.type === 'ambulance' ? (
                     <Ambulance className="w-3.5 h-3.5" />
@@ -353,10 +383,10 @@ const RightPanel = ({
                   )}
                 </div>
                 <div>
-                  <p className="font-bold text-slate-800 dark:text-slate-100 leading-snug">
+                  <p className="font-medium text-slate-800 dark:text-slate-200 leading-snug">
                     {alert.title}
                   </p>
-                  <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                     {alert.time}
                   </span>
                 </div>
@@ -366,68 +396,68 @@ const RightPanel = ({
         </div>
       </div>
 
-      {/* 5. Emergency Case (Frosted Glass Crimson Ruby) */}
-      <div className="rounded-[28px] p-5 sm:p-6 bg-rose-50/90 dark:bg-rose-950/30 backdrop-blur-2xl border border-rose-200/80 dark:border-rose-500/25 shadow-lg shadow-rose-100/50 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4),0_0_20px_rgba(244,63,94,0.12)] hover:-translate-y-1 hover:border-rose-400/50 transition-all duration-300">
-        <div className="flex items-center justify-between mb-4">
+      {/* 5. Emergency Case */}
+      <div className="rounded-xl p-4 sm:p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-600 dark:text-rose-300 flex items-center justify-center shadow-md border border-rose-400/30">
+            <div className="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 flex items-center justify-center border border-red-200 dark:border-red-800/60">
               <User className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white font-['Outfit']">
-                Emergency Case
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                Active Emergency Case
               </h3>
-              <p className="text-[11px] text-slate-600 dark:text-rose-200/70 font-medium">Critical Patient • ICU + Ventilator</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Critical Patient • ICU + Ventilator</p>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-300 dark:border-rose-400/40 shadow-sm">
+          <span className="px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60">
             Triage 2 - High
           </span>
         </div>
 
         {/* Spec List */}
-        <div className="space-y-2 p-3.5 rounded-2xl bg-white/90 dark:bg-white/[0.04] border border-rose-200/60 dark:border-white/[0.08] shadow-sm text-xs font-semibold backdrop-blur-md">
+        <div className="space-y-1.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs font-medium">
           <div className="flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">Age Group</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100">Adult (35-60)</span>
+            <span className="font-semibold text-slate-800 dark:text-slate-100">Adult (35-60)</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">Condition</span>
-            <span className="font-bold text-rose-600 dark:text-rose-400">Respiratory Distress</span>
+            <span className="font-semibold text-rose-600 dark:text-rose-400">Respiratory Distress</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">Location</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100">R. Ambulance (ETA 18 min)</span>
+            <span className="font-semibold text-slate-800 dark:text-slate-100">R. Ambulance (ETA 18 min)</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-slate-500 dark:text-slate-400">Triage Level</span>
-            <span className="font-extrabold text-amber-600 dark:text-amber-400">2 - High</span>
+            <span className="font-semibold text-amber-600 dark:text-amber-400">2 - High</span>
           </div>
         </div>
 
         {/* View Full Details Button */}
         <button
           onClick={onOpenPatientModal}
-          className="w-full mt-4 py-3 px-4 rounded-xl text-xs font-extrabold text-white bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-500 hover:to-red-600 border border-rose-400/40 shadow-lg shadow-rose-900/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+          className="w-full mt-3 py-2.5 px-4 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
         >
-          <span>View Full Details</span>
+          <span>View Patient Telemetry</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
 
         {/* Quick Actions Row */}
-        <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-rose-200/60 dark:border-white/[0.08] text-xs font-bold">
+        <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs font-medium">
           <button
             onClick={() => onQuickAction && onQuickAction('nearest')}
-            className="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl bg-white/90 hover:bg-white dark:bg-white/[0.05] dark:hover:bg-white/[0.1] text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white border border-rose-200/80 dark:border-white/10 hover:border-cyan-400/40 transition-all shadow-sm cursor-pointer"
+            className="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
           >
-            <MapPin className="w-3.5 h-3.5 text-rose-500 dark:text-rose-400 shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
             <span className="truncate">Find Nearest</span>
           </button>
           <button
             onClick={() => onQuickAction && onQuickAction('ambulance')}
-            className="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl bg-white/90 hover:bg-white dark:bg-white/[0.05] dark:hover:bg-white/[0.1] text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white border border-rose-200/80 dark:border-white/10 hover:border-cyan-400/40 transition-all shadow-sm cursor-pointer"
+            className="flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-750 text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
           >
-            <Ambulance className="w-3.5 h-3.5 text-rose-500 dark:text-rose-400 shrink-0" />
+            <Ambulance className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
             <span className="truncate">Track Ambulance</span>
           </button>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useEmergencyData } from '../../context/EmergencyDataContext';
-import { Play, RotateCcw, AlertTriangle, Radio, Activity, Check } from 'lucide-react';
+import { Play, RotateCcw, AlertTriangle, Radio, Activity } from 'lucide-react';
 
 const SimulationController = () => {
   const {
@@ -46,33 +46,30 @@ const SimulationController = () => {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-[26px] border border-cyan-500/25 bg-slate-900/40 dark:bg-slate-900/50 p-4 sm:p-5 shadow-[0_15px_35px_rgba(0,0,0,0.4),0_0_20px_rgba(6,182,212,0.12)] backdrop-blur-2xl">
-      {/* Top micro light reflection */}
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent" />
-
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] p-4 sm:p-5 shadow-sm text-slate-900 dark:text-white">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Left: Info */}
         <div className="flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 shadow-glow-cyan">
-            <Radio className="w-5 h-5 animate-pulse" />
+          <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800/60 text-blue-600 dark:text-blue-400 shrink-0">
+            <Radio className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5" />
                 Live Incident Simulation Engine
               </span>
               {simulationStatus.active ? (
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-extrabold uppercase bg-red-500/20 text-red-300 border border-red-500/40 animate-pulse shadow-sm shadow-red-500/30">
-                  SURGE ACTIVE // STEP {simulationStatus.step}/5
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800/60">
+                  SURGE ACTIVE • STEP {simulationStatus.step}/5
                 </span>
               ) : (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium uppercase bg-white/[0.04] text-slate-400 border border-white/[0.08]">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium uppercase bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                   STANDBY READY
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-300 mt-1 max-w-xl">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xl font-medium">
               {simulationStatus.description ||
                 'Simulate real-time casualty surges, automated ER saturation, and dynamic paramedic rerouting without page reload.'}
             </p>
@@ -80,43 +77,43 @@ const SimulationController = () => {
         </div>
 
         {/* Right: Demo Action Buttons */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap shrink-0">
           <button
             onClick={handleStartSurge}
             disabled={simulationStatus.active || loadingAction === 'surge'}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white shadow-lg shadow-red-600/30 disabled:opacity-50 transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-700 text-white shadow-sm transition-colors cursor-pointer disabled:opacity-50"
           >
-            <Play className="w-3.5 h-3.5 fill-white" />
-            {loadingAction === 'surge' ? 'Triggering...' : 'Start Surge Demo'}
+            <Play className="w-3.5 h-3.5" />
+            <span>{loadingAction === 'surge' ? 'Triggering...' : 'Start Surge Demo'}</span>
           </button>
 
           <button
             onClick={handleTriggerIncident}
             disabled={loadingAction === 'incident'}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/[0.04] hover:bg-amber-500/20 text-slate-200 hover:text-amber-300 border border-white/[0.1] hover:border-amber-500/40 transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/40 dark:hover:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800/60 transition-colors cursor-pointer disabled:opacity-50"
           >
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
-            Spawn Mass Incident
+            <AlertTriangle className="w-3.5 h-3.5" />
+            <span>Spawn Incident</span>
           </button>
 
           <button
             onClick={handleReset}
             disabled={loadingAction === 'reset'}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border border-white/[0.08] transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 transition-colors cursor-pointer disabled:opacity-50"
             title="Reset baseline capacities for all hospitals"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            Reset Baseline
+            <span>Reset Baseline</span>
           </button>
         </div>
       </div>
 
       {/* Progress Steps Indicator during Surge */}
       {simulationStatus.active && (
-        <div className="mt-4 pt-3 border-t border-slate-800/80">
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1.5">
+        <div className="mt-3.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 mb-1.5">
             <span>Progressive Surge Degradation</span>
-            <span className="text-cyan-400 font-bold">
+            <span className="text-red-600 dark:text-red-400 font-bold">
               Beds: {20 - (simulationStatus.step * 4) + 4} → {Math.max(0, 20 - (simulationStatus.step * 4))}
             </span>
           </div>
@@ -128,12 +125,12 @@ const SimulationController = () => {
               return (
                 <div
                   key={step}
-                  className={`h-1.5 rounded-full transition-all duration-500 ${
+                  className={`h-1.5 rounded-full transition-colors ${
                     isCurrent
-                      ? 'bg-red-500 animate-pulse ring-2 ring-red-400/50'
-                      : isPassed
                       ? 'bg-red-600'
-                      : 'bg-slate-800'
+                      : isPassed
+                      ? 'bg-red-400'
+                      : 'bg-slate-200 dark:bg-slate-700'
                   }`}
                 />
               );

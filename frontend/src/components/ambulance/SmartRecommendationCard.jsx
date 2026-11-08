@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Check, Navigation, AlertCircle } from 'lucide-react';
+import { Sparkles, Check, Navigation } from 'lucide-react';
 
 const SmartRecommendationCard = ({ recommendation, onSelectRoute }) => {
   if (!recommendation) return null;
@@ -8,66 +8,62 @@ const SmartRecommendationCard = ({ recommendation, onSelectRoute }) => {
   const res = hospital.resources || {};
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-cyan-300 dark:border-cyan-500/30 bg-gradient-to-r from-cyan-50/90 via-teal-50/80 to-blue-50/90 dark:from-cyan-950/40 dark:via-[#0B1426] dark:to-[#0A101E] p-5 shadow-lg shadow-cyan-100/50 dark:shadow-2xl backdrop-blur-2xl">
-      {/* Glow accent */}
-      <div className="absolute top-0 right-0 -mt-10 -mr-10 w-44 h-44 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
-
+    <div className="rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/20 p-4 sm:p-5 shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-extrabold uppercase tracking-wider bg-cyan-500/15 text-cyan-800 dark:text-cyan-300 border border-cyan-400/50 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 animate-pulse" />
-              AI Emergency Destination Recommendation
+            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold uppercase tracking-wider bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/80">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              AI Destination Recommendation
             </span>
           </div>
 
-          <div className="mt-2.5 flex items-baseline gap-3 flex-wrap">
-            <h3 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight font-['Outfit']">
+          <div className="mt-2 flex items-baseline gap-2.5 flex-wrap">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               {hospital.name}
             </h3>
-            <span className="text-xs font-mono font-bold text-cyan-800 dark:text-cyan-300 bg-cyan-100 dark:bg-cyan-950/80 px-2.5 py-0.5 rounded-lg border border-cyan-300 dark:border-cyan-500/40 shadow-sm">
+            <span className="text-xs font-mono font-bold text-blue-700 dark:text-blue-300 bg-white dark:bg-blue-900/50 px-2.5 py-0.5 rounded border border-blue-200 dark:border-blue-800">
               Match Score: {score}/100
             </span>
           </div>
 
-          <div className="mt-2 flex items-center gap-3 text-xs font-mono text-slate-600 dark:text-slate-300 flex-wrap">
-            <span className="px-2 py-0.5 rounded-md bg-white/80 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08]">
+          <div className="mt-2 flex items-center gap-2.5 text-xs font-mono text-slate-600 dark:text-slate-300 flex-wrap">
+            <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
               ETA: <strong className="text-slate-900 dark:text-white font-bold">{etaMinutes} min</strong>
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-white/80 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08]">
+            <span className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
               Distance: <strong className="text-slate-900 dark:text-white font-bold">{distanceKm} km</strong>
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300">
-              ER Beds: <strong className="text-emerald-600 dark:text-emerald-400 font-bold">{res.emergencyBedsAvailable} avail</strong>
+            <span className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300">
+              ER Beds: <strong className="font-bold">{res.emergencyBedsAvailable} avail</strong>
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-700 dark:text-cyan-300">
-              ICU: <strong className="text-cyan-600 dark:text-cyan-400 font-bold">{res.icuBedsAvailable} units</strong>
+            <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 text-blue-700 dark:text-blue-300">
+              ICU: <strong className="font-bold">{res.icuBedsAvailable} units</strong>
             </span>
           </div>
         </div>
 
         <button
           onClick={() => onSelectRoute(hospital)}
-          className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-teal-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/20 transition-all active:scale-95 flex-shrink-0"
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-sm shrink-0 cursor-pointer"
         >
-          <Navigation className="w-4 h-4 fill-white" />
-          Navigate & Route
+          <Navigation className="w-4 h-4" />
+          <span>Navigate & Route</span>
         </button>
       </div>
 
       {/* Transparent Why Recommended Breakdown */}
-      <div className="mt-4 pt-3.5 border-t border-slate-200/80 dark:border-white/[0.06]">
-        <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">
+      <div className="mt-3.5 pt-3 border-t border-blue-200/60 dark:border-blue-900/40">
+        <p className="text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
           Clinical Match Factors
         </p>
         <div className="flex flex-wrap gap-2">
           {reasons && reasons.map((reason, idx) => (
             <span
               key={idx}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/80 dark:bg-[#060B16] border border-slate-200 dark:border-white/[0.08] text-[11px] text-slate-700 dark:text-slate-300 font-medium shadow-sm"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-700 dark:text-slate-300 font-medium"
             >
-              <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 flex-shrink-0" />
+              <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
               {reason}
             </span>
           ))}

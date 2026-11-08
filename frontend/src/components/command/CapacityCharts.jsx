@@ -6,8 +6,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  Legend,
-  Cell
+  Legend
 } from 'recharts';
 
 const CapacityCharts = ({ hospitals = [] }) => {
@@ -27,24 +26,24 @@ const CapacityCharts = ({ hospitals = [] }) => {
     };
   });
 
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-[#080C15] border border-cyan-500/40 p-3 rounded-lg shadow-xl text-xs font-mono">
-          <p className="font-bold text-white mb-1.5 font-sans">{data.fullName}</p>
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-3 rounded-lg shadow-lg text-xs font-mono text-slate-900 dark:text-white">
+          <p className="font-bold mb-1.5 font-sans">{data.fullName}</p>
           <div className="space-y-1">
-            <p className="text-emerald-400">
-              Available ER Beds: <strong className="text-white">{data.availableBeds}</strong>
+            <p className="text-emerald-600 dark:text-emerald-400">
+              Available ER Beds: <strong className="text-slate-900 dark:text-white">{data.availableBeds}</strong>
             </p>
-            <p className="text-red-400">
-              Occupied ER Beds: <strong className="text-white">{data.occupiedBeds}</strong>
+            <p className="text-red-600 dark:text-red-400">
+              Occupied ER Beds: <strong className="text-slate-900 dark:text-white">{data.occupiedBeds}</strong>
             </p>
-            <p className="text-cyan-400">
-              Available ICU: <strong className="text-white">{data.icuAvailable}</strong>
+            <p className="text-blue-600 dark:text-blue-400">
+              Available ICU: <strong className="text-slate-900 dark:text-white">{data.icuAvailable}</strong>
             </p>
-            <p className="text-purple-400">
-              Available Vents: <strong className="text-white">{data.ventAvailable}</strong>
+            <p className="text-slate-600 dark:text-slate-300">
+              Available Vents: <strong className="text-slate-900 dark:text-white">{data.ventAvailable}</strong>
             </p>
           </div>
         </div>
@@ -56,12 +55,12 @@ const CapacityCharts = ({ hospitals = [] }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* Chart 1: Bed Occupancy Distribution */}
-      <div className="rounded-xl border border-[#1E2E48] bg-[#0E1626] p-4">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] p-4 sm:p-5 shadow-sm text-slate-900 dark:text-white">
         <div className="mb-4">
-          <h4 className="text-sm font-bold text-white tracking-wide">
+          <h4 className="text-sm font-bold tracking-tight">
             Emergency Bed Occupancy by Facility
           </h4>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Real-time comparison of available vs occupied ER beds
           </p>
         </div>
@@ -71,13 +70,13 @@ const CapacityCharts = ({ hospitals = [] }) => {
             <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
               <XAxis
                 dataKey="name"
-                stroke="#64748B"
+                stroke="#94A3B8"
                 fontSize={11}
                 tickLine={false}
                 angle={-20}
                 textAnchor="end"
               />
-              <YAxis stroke="#64748B" fontSize={11} tickLine={false} />
+              <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
               <Legend
                 verticalAlign="top"
@@ -92,13 +91,13 @@ const CapacityCharts = ({ hospitals = [] }) => {
       </div>
 
       {/* Chart 2: ICU & Ventilator Critical Assets */}
-      <div className="rounded-xl border border-[#1E2E48] bg-[#0E1626] p-4">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] p-4 sm:p-5 shadow-sm text-slate-900 dark:text-white">
         <div className="mb-4">
-          <h4 className="text-sm font-bold text-white tracking-wide">
+          <h4 className="text-sm font-bold tracking-tight">
             Critical Assets Standby (ICU & Ventilators)
           </h4>
-          <p className="text-xs text-slate-400">
-            Unallocated life-support equipment ready for immediate trauma
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Real-time availability of life-support capacity
           </p>
         </div>
 
@@ -107,21 +106,21 @@ const CapacityCharts = ({ hospitals = [] }) => {
             <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
               <XAxis
                 dataKey="name"
-                stroke="#64748B"
+                stroke="#94A3B8"
                 fontSize={11}
                 tickLine={false}
                 angle={-20}
                 textAnchor="end"
               />
-              <YAxis stroke="#64748B" fontSize={11} tickLine={false} />
+              <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} />
               <Tooltip content={<CustomTooltip />} />
               <Legend
                 verticalAlign="top"
                 align="right"
                 wrapperStyle={{ fontSize: '11px', paddingBottom: '10px' }}
               />
-              <Bar dataKey="icuAvailable" name="ICU Available" fill="#06B6D4" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="ventAvailable" name="Ventilators" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="icuAvailable" name="ICU Units" fill="#2563EB" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="ventAvailable" name="Ventilators" fill="#64748B" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

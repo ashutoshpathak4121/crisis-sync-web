@@ -82,34 +82,29 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full px-3 sm:px-6 pt-3 pb-1">
-      <div className="max-w-7xl mx-auto rounded-2xl border border-slate-200/80 dark:border-white/[0.08] bg-white/85 dark:bg-[#070D1A]/80 backdrop-blur-2xl shadow-lg shadow-slate-200/40 dark:shadow-2xl dark:shadow-black/60 px-4 sm:px-6 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] shadow-sm px-4 sm:px-6 transition-colors duration-200">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Brand Logo */}
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-teal-400 to-blue-600 p-[1.5px] shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-300">
-                <div className="w-full h-full bg-slate-50 dark:bg-[#070D1A] rounded-[10px] flex items-center justify-center">
-                  <Radio className="w-5 h-5 text-cyan-600 dark:text-cyan-400 animate-pulse" />
-                </div>
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-blue-600 text-white shadow-sm shrink-0">
+                <Radio className="w-5 h-5 text-white" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white font-['Outfit']">
-                    Crisis<span className="bg-gradient-to-r from-cyan-600 dark:from-cyan-400 via-teal-500 dark:via-teal-300 to-blue-600 dark:to-blue-400 bg-clip-text text-transparent">Sync</span>
-                  </span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest hidden sm:inline-block">
-                    PRO v2.6
+                  <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Crisis<span className="text-blue-600 dark:text-blue-400">Sync</span>
                   </span>
                 </div>
-                <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 -mt-0.5">
-                  Emergency Telemetry Sync
+                <span className="block text-xs font-mono uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Emergency Telemetry
                 </span>
               </div>
             </Link>
           </div>
 
           {/* Center Nav Links (Filtered by Role Permissions) */}
-          <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/[0.02] border border-slate-200/80 dark:border-white/[0.04]">
+          <nav className="hidden md:flex items-center gap-1 p-1 rounded-lg bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
             {allowedNavLinks.map((link) => {
               const Icon = link.icon;
               const isActive = location.pathname === link.path;
@@ -117,17 +112,14 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all duration-200 ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium tracking-normal transition-colors duration-150 ${
                     isActive
-                      ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/50 shadow-sm'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-white/[0.04]'
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700/50'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-400'}`} />
-                  {link.name}
-                  {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-pulse" />
-                  )}
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                  <span>{link.name}</span>
                 </Link>
               );
             })}
@@ -137,22 +129,23 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-3">
             <ConnectionStatus />
 
-            {/* Theme Toggle (Day-Light / Cyber-Dark) */}
+            {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-white/[0.05] dark:hover:bg-white/10 text-amber-500 dark:text-amber-400 border border-slate-200 dark:border-white/10 transition-colors shadow-sm"
-              title={isDark ? 'Switch to Daylight Theme' : 'Switch to Cyber-Dark Theme'}
+              className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors shadow-sm"
+              title={isDark ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+              aria-label="Toggle visual theme"
             >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4 text-cyan-600" />}
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
             </button>
 
             {/* Quick Demo Simulation Controls (Admin Only) */}
             {isSuperAdmin && (
-              <div className="flex items-center gap-1.5 border-l border-slate-200 dark:border-white/[0.08] pl-3">
+              <div className="flex items-center gap-1.5 border-l border-slate-200 dark:border-slate-800 pl-3">
                 {simulationStatus.active ? (
                   <button
                     onClick={resetSimulation}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/40 hover:bg-red-500/25 transition-all shadow-sm"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800/80 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors shadow-sm"
                     title="Reset Demo Simulation"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -162,10 +155,10 @@ const Navbar = () => {
                   <button
                     onClick={handleStartSimulation}
                     disabled={isSurging}
-                    className="relative group overflow-hidden flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-cyan-500/20 via-teal-500/20 to-blue-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/50 hover:border-cyan-400 transition-all shadow-sm active:scale-95"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition-colors shadow-sm"
                     title="Trigger Mass Casualty Demo on Hospital"
                   >
-                    <PlayCircle className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 animate-pulse" />
+                    <PlayCircle className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                     Demo Surge
                   </button>
                 )}
@@ -173,17 +166,17 @@ const Navbar = () => {
             )}
 
             {/* User Profile / Login */}
-            <div className="border-l border-slate-200 dark:border-white/[0.08] pl-3">
+            <div className="border-l border-slate-200 dark:border-slate-800 pl-3">
               {isAuthenticated ? (
-                <div className="flex items-center gap-2.5 bg-slate-100 dark:bg-white/[0.02] border border-slate-200 dark:border-white/[0.06] rounded-xl px-2.5 py-1">
-                  <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+                <div className="flex items-center gap-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 rounded-lg px-2.5 py-1">
+                  <div className="w-6 h-6 rounded bg-blue-600 flex items-center justify-center text-xs font-bold text-white shadow-sm">
                     {user.name.charAt(0)}
                   </div>
                   <div className="text-left">
-                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate max-w-[110px] leading-tight">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate max-w-[110px] leading-tight">
                       {user.name}
                     </p>
-                    <span className="text-[9px] text-cyan-600 dark:text-cyan-400 font-mono uppercase font-semibold">
+                    <span className="text-xs text-blue-600 dark:text-blue-400 font-mono uppercase font-medium">
                       {user.role}
                     </span>
                   </div>
@@ -192,8 +185,9 @@ const Navbar = () => {
                       logout();
                       navigate('/login');
                     }}
-                    className="p-1 rounded-lg text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-slate-200 dark:hover:bg-white/[0.06] transition-colors"
+                    className="p-1 rounded text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                     title="Sign Out"
+                    aria-label="Sign out"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                   </button>
@@ -201,7 +195,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-white/[0.05] hover:bg-cyan-500/20 text-slate-800 dark:text-slate-200 hover:text-cyan-600 dark:hover:text-cyan-300 transition-all border border-slate-200 dark:border-white/[0.1] hover:border-cyan-500/40"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-colors shadow-sm"
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   Demo Login
@@ -214,10 +208,11 @@ const Navbar = () => {
           <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-amber-500 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               title="Toggle Theme"
+              aria-label="Toggle visual theme"
             >
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5 text-cyan-600" />}
+              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
             </button>
             <ConnectionStatus />
             <button
@@ -242,7 +237,7 @@ const Navbar = () => {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-medium ${
                     isActive
-                      ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30'
+                      ? 'bg-blue-600 text-white'
                       : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
@@ -259,9 +254,9 @@ const Navbar = () => {
                     handleStartSimulation();
                     setMobileMenuOpen(false);
                   }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
                 >
-                  <PlayCircle className="w-4 h-4" />
+                  <PlayCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   Trigger Demo Surge
                 </button>
               )}
@@ -272,7 +267,7 @@ const Navbar = () => {
                     logout();
                     setMobileMenuOpen(false);
                   }}
-                  className="flex items-center gap-1 text-xs text-red-500 dark:text-red-400 py-2 px-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+                  className="flex items-center gap-1 text-xs text-red-600 dark:text-red-400 py-2 px-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium"
                 >
                   <LogOut className="w-4 h-4" /> Sign Out
                 </button>
@@ -280,7 +275,7 @@ const Navbar = () => {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-1 text-xs text-cyan-600 dark:text-cyan-400 py-2 px-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+                  className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 py-2 px-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-semibold"
                 >
                   <LogIn className="w-4 h-4" /> Demo Login
                 </Link>

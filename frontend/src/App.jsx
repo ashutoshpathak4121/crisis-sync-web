@@ -19,10 +19,10 @@ const ProtectedRoute = ({ allowedRoles = [], children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-100 dark:bg-[#030712] flex items-center justify-center transition-colors">
+      <div className="min-h-screen bg-slate-50 dark:bg-[#0B0F19] flex items-center justify-center transition-colors">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin" />
-          <span className="text-xs font-mono text-cyan-600 dark:text-cyan-300 font-medium">Verifying healthcare clearance...</span>
+          <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
+          <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-medium">Verifying healthcare clearance...</span>
         </div>
       </div>
     );
@@ -60,7 +60,7 @@ function App() {
     location.pathname === '/analytics';
 
   return (
-    <div className="min-h-screen flex flex-col relative bg-slate-100 dark:bg-[#030712] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col relative bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {!isRootDashboard && <Navbar />}
       <div className="flex-1">
         <Routes>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Minus, Check, AlertCircle } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 
 const ResourceCard = ({
   title,
@@ -64,31 +64,33 @@ const ResourceCard = ({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border bg-white/85 dark:bg-[#0B1324]/85 backdrop-blur-xl p-5 transition-all duration-300 shadow-md shadow-slate-200/40 dark:shadow-none ${
-        highlight ? 'flash-update ring-2 ring-cyan-400 shadow-glow-cyan' : 'border-slate-200/80 dark:border-white/[0.08] hover:border-cyan-400/40'
+      className={`rounded-xl border bg-white dark:bg-[#1E293B] p-4 sm:p-5 transition-colors shadow-sm ${
+        highlight
+          ? 'flash-update border-blue-500 ring-2 ring-blue-500/30'
+          : 'border-slate-200 dark:border-slate-800'
       }`}
     >
       {/* Top Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {Icon && (
-            <div className="p-3 rounded-xl bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 shadow-sm">
+            <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/60">
               <Icon className="w-5 h-5" />
             </div>
           )}
           <div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide font-['Outfit']">{title}</h4>
+            <h4 className="text-sm font-semibold text-slate-900 dark:text-white tracking-wide">{title}</h4>
             <span
-              className={`inline-flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider ${
+              className={`inline-flex items-center gap-1.5 text-[11px] font-mono font-semibold uppercase tracking-wider ${
                 statusColor === 'red'
-                  ? 'text-red-500 dark:text-red-400'
+                  ? 'text-red-600 dark:text-red-400'
                   : statusColor === 'amber'
-                  ? 'text-amber-500 dark:text-amber-400'
+                  ? 'text-amber-600 dark:text-amber-400'
                   : 'text-emerald-600 dark:text-emerald-400'
               }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${barColor} animate-pulse`} />
-              {badgeText} // {percentage}% Cap
+              <span className={`w-1.5 h-1.5 rounded-full ${barColor}`} />
+              {badgeText} • {percentage}% Cap
             </span>
           </div>
         </div>
@@ -97,21 +99,21 @@ const ResourceCard = ({
         <div className="text-right">
           <div className="flex items-baseline justify-end gap-1 font-mono">
             <span
-              className={`text-3xl font-black tracking-tight transition-all duration-200 ${
+              className={`text-2xl sm:text-3xl font-bold tracking-tight ${
                 statusColor === 'red'
-                  ? 'text-red-500 dark:text-red-400'
+                  ? 'text-red-600 dark:text-red-400'
                   : statusColor === 'amber'
-                  ? 'text-amber-500 dark:text-amber-400'
-                  : 'text-emerald-600 dark:text-emerald-400'
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-slate-900 dark:text-white'
               }`}
             >
               {localAvailable}
             </span>
             {totalKey && (
-              <span className="text-sm text-slate-400 dark:text-slate-500 font-semibold">/ {total}</span>
+              <span className="text-sm text-slate-400 dark:text-slate-500 font-medium">/ {total}</span>
             )}
           </div>
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
             {unit ? `${unit} available` : 'ready units'}
           </span>
         </div>
@@ -119,47 +121,41 @@ const ResourceCard = ({
 
       {/* Capacity Progress Bar */}
       {totalKey && (
-        <div className="mt-4">
-          <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-800/80 overflow-hidden p-[1px]">
+        <div className="mt-3.5">
+          <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-500 ease-out ${
-                statusColor === 'red'
-                  ? 'bg-gradient-to-r from-red-500 to-rose-500'
-                  : statusColor === 'amber'
-                  ? 'bg-gradient-to-r from-amber-500 to-yellow-500'
-                  : 'bg-gradient-to-r from-emerald-500 to-teal-400'
-              }`}
+              className={`h-full rounded-full transition-all duration-300 ease-out ${barColor}`}
               style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }}
             />
           </div>
         </div>
       )}
 
-      {/* Stepper Controls */}
-      <div className="mt-4 pt-3.5 border-t border-slate-200/80 dark:border-white/[0.06] flex items-center justify-between gap-3">
-        <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          Touch Dial:
+      {/* Stepper Controls with 44px Minimum Touch Targets */}
+      <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+        <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
+          Quick Adjust:
         </span>
 
         <div className="flex items-center gap-2">
           <button
             onClick={handleDecrement}
             disabled={localAvailable <= 0 || isUpdating}
-            className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] active:scale-95 text-slate-700 dark:text-slate-200 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all border border-slate-200 dark:border-white/[0.08]"
-            title="Decrement by 1"
+            aria-label={`Decrease ${title} available count`}
+            className="min-w-[44px] min-h-[44px] rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
           >
             <Minus className="w-4 h-4" />
           </button>
 
-          <span className="w-12 text-center font-mono font-black text-sm text-slate-900 dark:text-white bg-slate-100 dark:bg-[#060B16] py-1 px-2 rounded-xl border border-slate-200 dark:border-white/[0.08]">
+          <span className="min-w-[44px] min-h-[44px] flex items-center justify-center font-mono font-bold text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800/80 rounded-lg border border-slate-200 dark:border-slate-700">
             {localAvailable}
           </span>
 
           <button
             onClick={handleIncrement}
             disabled={(totalKey && localAvailable >= total) || isUpdating}
-            className="w-8 h-8 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 active:scale-95 text-cyan-600 dark:text-cyan-300 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all border border-cyan-500/30 hover:border-cyan-400 shadow-sm"
-            title="Increment by 1"
+            aria-label={`Increase ${title} available count`}
+            className="min-w-[44px] min-h-[44px] rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/50 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors border border-blue-200 dark:border-blue-800/60 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
           </button>

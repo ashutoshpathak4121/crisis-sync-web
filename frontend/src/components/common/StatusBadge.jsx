@@ -16,15 +16,15 @@ const StatusBadge = ({ status, type = 'hospital', size = 'md' }) => {
   const sizeClasses = size === 'sm' 
     ? 'text-xs px-2 py-0.5' 
     : size === 'lg' 
-    ? 'text-sm px-3.5 py-1.5 font-semibold' 
-    : 'text-xs px-2.5 py-1 font-medium';
+    ? 'text-sm px-3 py-1 font-semibold' 
+    : 'text-xs px-2.5 py-0.5 font-medium';
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border ${config.color} ${sizeClasses} backdrop-blur-sm tracking-wide`}
+      className={`inline-flex items-center gap-1.5 rounded-md border ${config.color} ${sizeClasses} tracking-normal select-none`}
     >
       {config.dot && (
-        <span className={`w-1.5 h-1.5 rounded-full ${config.dot} animate-pulse`} />
+        <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
       )}
       {config.label || status}
     </span>

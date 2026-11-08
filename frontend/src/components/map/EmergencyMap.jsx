@@ -537,29 +537,29 @@ const EmergencyMap = ({
 
       {/* Floating Active Route Navigation Telemetry HUD */}
       {activeRoute && (
-        <div className="absolute top-4 left-4 z-[1000] bg-[#0E1626]/95 border border-cyan-500/50 p-3.5 rounded-xl shadow-2xl backdrop-blur-md font-mono text-xs text-slate-200 max-w-xs">
-          <div className="flex items-center gap-2 text-cyan-400 font-bold text-[11px] uppercase tracking-wider mb-1">
-            <Navigation className="w-3.5 h-3.5 animate-pulse" />
+        <div className="absolute top-4 left-4 z-[1000] bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 p-3 rounded-lg shadow-md font-mono text-xs text-slate-800 dark:text-slate-200 max-w-xs">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-semibold text-[11px] uppercase tracking-wider mb-1">
+            <Navigation className="w-3.5 h-3.5" />
             <span>Active Navigation Locked</span>
           </div>
-          <h4 className="text-white font-extrabold text-sm truncate">
+          <h4 className="text-slate-900 dark:text-white font-bold text-sm truncate font-sans">
             {activeRoute.hospital?.name}
           </h4>
-          <div className="flex items-center gap-4 mt-1.5 text-slate-300 font-bold">
-            <span>ETA: <strong className="text-cyan-400 font-extrabold">{activeRoute.durationMin} min</strong></span>
-            <span>Dist: <strong className="text-white">{activeRoute.distanceKm} km</strong></span>
+          <div className="flex items-center gap-4 mt-1.5 text-slate-600 dark:text-slate-300 font-semibold">
+            <span>ETA: <strong className="text-blue-600 dark:text-blue-400 font-bold">{activeRoute.durationMin} min</strong></span>
+            <span>Dist: <strong className="text-slate-900 dark:text-white font-bold">{activeRoute.distanceKm} km</strong></span>
           </div>
         </div>
       )}
 
       {/* GPS Status Toast */}
       {locationStatus && (
-        <div className={`absolute bottom-14 left-1/2 -translate-x-1/2 z-[1000] px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-2xl backdrop-blur-md border animate-bounce ${
+        <div className={`absolute bottom-14 left-1/2 -translate-x-1/2 z-[1000] px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow-md border ${
           locationStatus.type === 'error'
-            ? 'bg-red-950/90 border-red-500/50 text-red-200'
+            ? 'bg-red-50 dark:bg-red-950/80 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300'
             : locationStatus.type === 'success'
-            ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200'
-            : 'bg-cyan-950/90 border-cyan-500/50 text-cyan-200'
+            ? 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300'
+            : 'bg-blue-50 dark:bg-blue-950/80 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300'
         }`}>
           {locationStatus.text}
         </div>
@@ -572,19 +572,19 @@ const EmergencyMap = ({
           <button
             onClick={() => onAttachNearestHospital(userLocation)}
             disabled={isAttaching}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all shadow-xl backdrop-blur-md active:scale-95 ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors shadow-sm cursor-pointer ${
               isAttaching
-                ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 animate-pulse'
+                ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 text-emerald-700 dark:text-emerald-300'
                 : activeRoute
-                ? 'bg-emerald-600 text-white border-emerald-400 shadow-emerald-600/30'
-                : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white border-emerald-500 shadow-emerald-600/20'
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600'
+                : 'bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600'
             }`}
-            title="Automatically attach to the nearest accepting emergency hospital and plot navigation route"
+            title="Automatically attach to nearest accepting emergency hospital"
           >
             {isAttaching ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <Zap className="w-4 h-4 fill-white text-white" />
+              <Zap className="w-3.5 h-3.5 fill-current" />
             )}
             <span className="hidden sm:inline">
               {isAttaching ? 'Attaching...' : activeRoute ? 'Re-Attach Near ER' : 'Attach Near Hospital'}
@@ -596,19 +596,19 @@ const EmergencyMap = ({
         <button
           onClick={handleGetMyLocation}
           disabled={isLocating}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-all shadow-xl backdrop-blur-md ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors shadow-sm cursor-pointer ${
             isLocating
-              ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 animate-pulse'
+              ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-300 text-blue-700 dark:text-blue-300'
               : userLocation
-              ? 'bg-blue-600 text-white border-blue-400 shadow-blue-500/30'
-              : 'bg-[#0E1626]/90 border-slate-700 text-slate-200 hover:text-cyan-400 hover:bg-slate-800'
+              ? 'bg-blue-600 text-white border-blue-600'
+              : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750'
           }`}
           title="Detect and Center on My Real GPS Location"
         >
           {isLocating ? (
-            <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600 dark:text-blue-400" />
           ) : (
-            <Locate className="w-4 h-4" />
+            <Locate className="w-3.5 h-3.5" />
           )}
           <span className="hidden sm:inline">
             {isLocating ? 'Locating...' : 'My Location'}
@@ -618,7 +618,7 @@ const EmergencyMap = ({
         {/* Recenter Button */}
         <button
           onClick={handleRecenter}
-          className="p-2 rounded-xl bg-[#0E1626]/90 border border-slate-700 text-slate-200 hover:text-cyan-400 hover:bg-slate-800 transition-all shadow-xl backdrop-blur-md"
+          className="p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 transition-colors shadow-sm cursor-pointer"
           title="Recenter Map View"
         >
           <Crosshair className="w-4 h-4" />
@@ -628,15 +628,15 @@ const EmergencyMap = ({
         <div className="relative">
           <button
             onClick={() => setShowLayerMenu(!showLayerMenu)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#0E1626]/90 border border-slate-700 text-slate-200 hover:text-cyan-400 hover:bg-slate-800 transition-all shadow-xl backdrop-blur-md text-xs font-semibold"
-            title="Switch Map Layers (Streets, OpenStreetMap, Dark, Satellite)"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 transition-colors shadow-sm text-xs font-semibold cursor-pointer"
+            title="Switch Map Layers"
           >
-            <Layers className="w-4 h-4 text-cyan-400" />
+            <Layers className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span className="hidden sm:inline">{TILE_LAYERS[activeTileType].name}</span>
           </button>
 
           {showLayerMenu && (
-            <div className="absolute right-0 mt-2 w-52 rounded-xl bg-[#0E1626] border border-slate-700 shadow-2xl p-1.5 z-50 text-xs space-y-1 backdrop-blur-md">
+            <div className="absolute right-0 mt-2 w-48 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-lg p-1.5 z-50 text-xs space-y-0.5">
               {Object.keys(TILE_LAYERS).map((key) => {
                 const isSelected = activeTileType === key;
                 return (
@@ -646,10 +646,10 @@ const EmergencyMap = ({
                       setActiveTileType(key);
                       setShowLayerMenu(false);
                     }}
-                    className={`w-full text-left px-3 py-2 rounded-lg font-medium transition-colors ${
+                    className={`w-full text-left px-2.5 py-1.5 rounded-md font-medium transition-colors cursor-pointer ${
                       isSelected
-                        ? 'bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/30'
-                        : 'text-slate-300 hover:bg-slate-800'
+                        ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-semibold'
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-750'
                     }`}
                   >
                     {TILE_LAYERS[key].name}
@@ -662,19 +662,19 @@ const EmergencyMap = ({
       </div>
 
       {/* Map Legend */}
-      <div className="absolute bottom-4 left-4 z-[1000] flex items-center gap-3 bg-[#080C15]/90 border border-slate-800/80 px-3.5 py-1.5 rounded-xl text-[11px] text-slate-300 shadow-xl backdrop-blur-md">
+      <div className="absolute bottom-4 left-4 z-[1000] flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-lg text-[11px] text-slate-700 dark:text-slate-300 shadow-sm">
         <span className="flex items-center gap-1.5 font-medium">
           <span className="w-2.5 h-2.5 rounded bg-emerald-500 inline-block" /> Hospital
         </span>
         <span className="flex items-center gap-1.5 font-medium">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block" /> Ambulance
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block" /> Ambulance
         </span>
         <span className="flex items-center gap-1.5 font-medium">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" /> Emergency Scene
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" /> Incident
         </span>
         {userLocation && (
-          <span className="flex items-center gap-1.5 font-medium text-blue-400">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block animate-ping" /> You
+          <span className="flex items-center gap-1.5 font-medium text-blue-600 dark:text-blue-400">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block" /> You
           </span>
         )}
       </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import StatusBadge from '../common/StatusBadge';
-import { Search, Filter, ArrowUpRight, Bed, Activity, Wind, Navigation, Zap, Check } from 'lucide-react';
+import { Search, Bed, Activity, Wind, Navigation, Zap, Check } from 'lucide-react';
 
 const HospitalTable = ({
   hospitals = [],
@@ -24,12 +24,12 @@ const HospitalTable = ({
   });
 
   return (
-    <div className="rounded-[28px] border border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-slate-900/40 backdrop-blur-2xl overflow-hidden shadow-lg shadow-slate-200/40 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4)]">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] overflow-hidden shadow-sm">
       {/* Header & Controls */}
-      <div className="p-4 sm:p-5 border-b border-slate-200/80 dark:border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50 dark:bg-white/[0.01]">
+      <div className="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-800/20">
         <div>
-          <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide flex items-center gap-2 font-['Outfit']">
-            <Activity className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+          <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide flex items-center gap-2">
+            <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             Hospital Capacity Telemetry Matrix
           </h4>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -46,7 +46,7 @@ const HospitalTable = ({
               placeholder="Search facility..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-white dark:bg-[#060B16] border border-slate-200 dark:border-white/[0.1] rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none w-48 transition-all shadow-sm"
+              className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:border-blue-500 focus:outline-none w-44 transition-colors shadow-sm"
             />
           </div>
 
@@ -54,7 +54,7 @@ const HospitalTable = ({
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="bg-white dark:bg-[#060B16] border border-slate-200 dark:border-white/[0.1] rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-300 focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none transition-all cursor-pointer shadow-sm"
+            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-800 dark:text-slate-300 focus:border-blue-500 focus:outline-none transition-colors cursor-pointer shadow-sm"
           >
             <option value="ALL">All Statuses</option>
             <option value="ACCEPTING">Accepting Only</option>
@@ -69,16 +69,16 @@ const HospitalTable = ({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead>
-            <tr className="border-b border-slate-200 dark:border-white/[0.06] bg-slate-100/60 dark:bg-white/[0.02] text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-mono">
-              <th className="py-3.5 px-4 font-semibold">Facility Name</th>
-              <th className="py-3.5 px-4 font-semibold">Status</th>
-              <th className="py-3.5 px-4 font-semibold">Emergency Beds</th>
-              <th className="py-3.5 px-4 font-semibold">ICU Units</th>
-              <th className="py-3.5 px-4 font-semibold">Ventilators</th>
-              <th className="py-3.5 px-4 font-semibold text-right">Telemetry Action</th>
+            <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 uppercase tracking-wider text-[10px] font-mono">
+              <th className="py-3 px-4 font-semibold">Facility Name</th>
+              <th className="py-3 px-4 font-semibold">Status</th>
+              <th className="py-3 px-4 font-semibold">Emergency Beds</th>
+              <th className="py-3 px-4 font-semibold">ICU Units</th>
+              <th className="py-3 px-4 font-semibold">Ventilators</th>
+              <th className="py-3 px-4 font-semibold text-right">Telemetry Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-white/[0.04]">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
             {filteredHospitals.map((h) => {
               const res = h.resources || {};
               const erAvail = res.emergencyBedsAvailable !== undefined ? res.emergencyBedsAvailable : 0;
@@ -94,62 +94,62 @@ const HospitalTable = ({
                   key={h.id}
                   className={`transition-colors duration-200 ${
                     isRecentlyUpdated
-                      ? 'flash-update bg-cyan-100/50 dark:bg-cyan-950/40'
+                      ? 'flash-update bg-blue-50 dark:bg-blue-950/30'
                       : isSelected
-                      ? 'bg-cyan-50 dark:bg-cyan-500/10'
-                      : 'hover:bg-slate-50 dark:hover:bg-white/[0.03]'
+                      ? 'bg-blue-50/70 dark:bg-blue-950/20'
+                      : 'hover:bg-slate-50 dark:hover:bg-slate-800/30'
                   }`}
                 >
-                  <td className="py-3.5 px-4">
-                    <span className="font-bold text-slate-900 dark:text-white block tracking-tight text-xs sm:text-sm font-['Outfit']">{h.name}</span>
+                  <td className="py-3 px-4">
+                    <span className="font-semibold text-slate-900 dark:text-white block tracking-tight text-xs sm:text-sm">{h.name}</span>
                     <span className="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-[220px] block mt-0.5">
                       {h.address}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4">
+                  <td className="py-3 px-4">
                     <StatusBadge status={h.emergencyStatus} type="hospital" size="sm" />
                   </td>
-                  <td className="py-3.5 px-4">
+                  <td className="py-3 px-4">
                     <div className="space-y-1">
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className={`font-bold ${erAvail <= 2 ? 'text-red-500 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                        <span className={`font-semibold ${erAvail <= 2 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                           {erAvail} / {erTotal} beds
                         </span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400">{erPct}%</span>
                       </div>
-                      <div className="w-24 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800/80 overflow-hidden">
+                      <div className="w-24 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
                         <div
-                          className={`h-full rounded-full transition-all duration-500 ${
+                          className={`h-full rounded-full transition-all duration-300 ${
                             erAvail <= 2
-                              ? 'bg-gradient-to-r from-red-500 to-rose-500'
+                              ? 'bg-red-500'
                               : erPct <= 40
-                              ? 'bg-gradient-to-r from-amber-500 to-yellow-500'
-                              : 'bg-gradient-to-r from-emerald-500 to-teal-400'
+                              ? 'bg-amber-500'
+                              : 'bg-emerald-500'
                           }`}
                           style={{ width: `${Math.min(100, erPct)}%` }}
                         />
                       </div>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 font-mono">
-                    <span className={res.icuBedsAvailable === 0 ? 'text-red-500 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200'}>
+                  <td className="py-3 px-4 font-mono">
+                    <span className={res.icuBedsAvailable === 0 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200'}>
                       {res.icuBedsAvailable || 0} / {res.icuBedsTotal || 10}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-slate-800 dark:text-slate-200">
+                  <td className="py-3 px-4 font-mono text-slate-800 dark:text-slate-200">
                     {res.ventilatorsAvailable || 0} / {res.ventilatorsTotal || 6}
                   </td>
-                  <td className="py-3.5 px-4 text-right">
+                  <td className="py-3 px-4 text-right">
                     <div className="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap">
                       {/* Action 1: Focus & Locate on Tactical Map */}
                       <button
                         onClick={() => onSelectHospital && onSelectHospital(h)}
-                        className={`inline-flex items-center gap-1 text-[11px] font-bold py-1.5 px-2.5 rounded-xl border transition-all active:scale-95 shadow-sm ${
+                        className={`inline-flex items-center gap-1 text-[11px] font-semibold py-1.5 px-2.5 rounded-lg border transition-colors cursor-pointer ${
                           isSelected
-                            ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-extrabold shadow-glow-cyan'
-                            : 'text-cyan-700 dark:text-cyan-400 hover:text-cyan-900 dark:hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-400/40 hover:border-cyan-400'
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                            : 'text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-white bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800/60 hover:bg-blue-100 dark:hover:bg-blue-900/40'
                         }`}
-                        title="Locate facility, center camera and display live HUD on tactical map"
+                        title="Locate facility on tactical map"
                       >
                         <Navigation className="w-3 h-3" />
                         <span>Focus</span>
@@ -158,7 +158,7 @@ const HospitalTable = ({
                       {/* Action 2: Attach / Dispatch Ambulance to this facility */}
                       {onAttachHospital && (
                         isRouted ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 border border-emerald-400/40 px-2.5 py-1.5 rounded-xl font-mono">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 px-2.5 py-1.5 rounded-lg font-mono">
                             <Check className="w-3 h-3" />
                             <span>Routed</span>
                           </span>
@@ -166,10 +166,10 @@ const HospitalTable = ({
                           <button
                             onClick={() => onAttachHospital(h)}
                             disabled={isAttaching || h.emergencyStatus === 'FULL'}
-                            className={`inline-flex items-center gap-1 text-[11px] font-bold py-1.5 px-2.5 rounded-xl border transition-all active:scale-95 shadow-sm ${
+                            className={`inline-flex items-center gap-1 text-[11px] font-semibold py-1.5 px-2.5 rounded-lg border transition-colors cursor-pointer ${
                               h.emergencyStatus === 'FULL'
-                                ? 'opacity-40 cursor-not-allowed text-slate-400 dark:text-slate-500 border-slate-200 dark:border-white/[0.06] bg-slate-100 dark:bg-white/[0.02]'
-                                : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-400/40 hover:border-emerald-400'
+                                ? 'opacity-40 cursor-not-allowed text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800'
+                                : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-white bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/40'
                             }`}
                             title={
                               h.emergencyStatus === 'FULL'

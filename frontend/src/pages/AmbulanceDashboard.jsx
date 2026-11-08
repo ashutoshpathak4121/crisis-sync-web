@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useEmergencyData } from '../context/EmergencyDataContext';
-import { routeService } from '../services';
+import { routeService, ambulanceService } from '../services';
 import EmergencyMap from '../components/map/EmergencyMap';
 import HospitalCard from '../components/ambulance/HospitalCard';
 import SmartRecommendationCard from '../components/ambulance/SmartRecommendationCard';
@@ -130,175 +130,168 @@ const AmbulanceDashboard = () => {
   });
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-[#030712] relative overflow-hidden py-6 px-4 sm:px-6 lg:px-8 font-['Plus_Jakarta_Sans',sans-serif] text-slate-900 dark:text-slate-100 transition-colors duration-300">
-      {/* Dynamic Ambient Background Lights */}
-      <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-cyan-500/10 dark:bg-cyan-500/15 blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/3 -right-20 w-[550px] h-[550px] rounded-full bg-emerald-500/10 dark:bg-emerald-600/15 blur-[150px] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.04)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-50" />
-
-      <div className="max-w-7xl mx-auto space-y-6 relative z-10">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0B0F19] py-6 px-4 sm:px-6 lg:px-8 text-slate-900 dark:text-slate-100 transition-colors">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Paramedic Status Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-[28px] border border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-slate-900/40 backdrop-blur-2xl shadow-lg shadow-slate-200/40 dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] shadow-sm">
           <div className="flex items-center gap-3.5">
-            <div className="p-3.5 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 shadow-sm">
+            <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800/60 text-blue-600 dark:text-blue-400 shrink-0">
               <AmbulanceIcon className="w-7 h-7" />
             </div>
             <div>
               <div className="flex items-center gap-2.5">
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono font-semibold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">
                   Ambulance Dispatch Portal
                 </span>
                 <StatusBadge status={currentAmbulance.status} type="ambulance" size="md" />
               </div>
-              <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight font-['Outfit'] mt-1">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight mt-1">
                 Unit {currentAmbulance.vehicleNumber}
               </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2 flex-wrap font-mono">
-              <span>Paramedic: <strong className="text-slate-800 dark:text-slate-200">{user?.name || 'On Duty'}</strong></span>
-              <span className="text-slate-400 dark:text-slate-600">•</span>
-              <span>GPS: <strong className="text-cyan-600 dark:text-cyan-400">{currentAmbulance.latitude.toFixed(4)}°N, {currentAmbulance.longitude.toFixed(4)}°E</strong></span>
-            </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2 flex-wrap font-mono">
+                <span>Paramedic: <strong className="text-slate-800 dark:text-slate-200 font-sans">{user?.name || 'On Duty'}</strong></span>
+                <span className="text-slate-300 dark:text-slate-600">•</span>
+                <span>GPS: <strong className="text-blue-600 dark:text-blue-400">{currentAmbulance.latitude.toFixed(4)}°N, {currentAmbulance.longitude.toFixed(4)}°E</strong></span>
+              </p>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* Attached Hospital Status Badge & Detach Action */}
+            {currentAmbulance.destinationHospital ? (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-200 text-xs font-medium">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <Link2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>
+                  Attached: <strong className="text-slate-900 dark:text-white font-semibold">{currentAmbulance.destinationHospital.name}</strong>
+                </span>
+                <button
+                  onClick={handleDetachHospital}
+                  className="ml-1 text-[11px] underline text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 flex items-center gap-0.5 cursor-pointer"
+                  title="Detach ambulance from current hospital destination"
+                >
+                  <Unlink className="w-3 h-3" /> Detach
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleAttachNearestHospital()}
+                disabled={isAttachingHospital}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer disabled:opacity-50"
+                title="Automatically find and attach to the closest accepting hospital with available ER beds"
+              >
+                <Zap className="w-3.5 h-3.5" />
+                <span>{isAttachingHospital ? 'Attaching ER...' : 'Attach Near Hospital'}</span>
+              </button>
+            )}
+
+            <button
+              onClick={() => setIsReportModalOpen(true)}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-red-600 hover:bg-red-700 text-white shadow-sm transition-colors cursor-pointer"
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Report Scene Incident</span>
+            </button>
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Attached Hospital Status Badge & Detach Action */}
-          {currentAmbulance.destinationHospital ? (
-            <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-500/50 text-emerald-800 dark:text-emerald-200 text-xs font-semibold shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping" />
-              <Link2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>
-                Attached: <strong className="text-slate-900 dark:text-white">{currentAmbulance.destinationHospital.name}</strong>
+        {/* Smart Destination Recommendation Banner */}
+        <SmartRecommendationCard
+          recommendation={recommendation}
+          onSelectRoute={handleRouteToHospital}
+        />
+
+        {/* Active Navigation Route HUD (if routed) */}
+        {activeRoute && (
+          <RoutePanel
+            route={activeRoute}
+            onClearRoute={() => handleDetachHospital()}
+          />
+        )}
+
+        {/* Main Grid: Live Emergency Map + Nearby Hospitals */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left / Top (7 cols): Interactive Live Emergency Map */}
+          <div className="lg:col-span-7 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Navigation className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide">
+                  Live Emergency Tactical Map
+                </h3>
+              </div>
+              <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-medium">
+                Real-Time GPS Tracking Active
               </span>
+            </div>
+
+            <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+              <EmergencyMap
+                hospitals={hospitals}
+                ambulances={ambulances}
+                incidents={incidents}
+                activeRoute={activeRoute}
+                onSelectHospital={handleRouteToHospital}
+                selectedHospitalId={activeRoute?.hospital?.id || currentAmbulance?.destinationHospitalId}
+                onUserLocationChange={handleUserLocationChange}
+                onAttachNearestHospital={handleAttachNearestHospital}
+                isAttaching={isAttachingHospital}
+                height="480px"
+              />
+            </div>
+          </div>
+
+          {/* Right (5 cols): Nearby Hospitals with Live Updating Cards */}
+          <div className="lg:col-span-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide">
+                Nearby Emergency Centers ({filteredHospitals.length})
+              </h3>
+
               <button
-                onClick={handleDetachHospital}
-                className="ml-1 text-[11px] underline text-slate-600 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-300 flex items-center gap-0.5"
-                title="Detach ambulance from current hospital destination"
+                onClick={() => setFilterAcceptingOnly(!filterAcceptingOnly)}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium border transition-colors cursor-pointer ${
+                  filterAcceptingOnly
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300'
+                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
               >
-                <Unlink className="w-3 h-3" /> Detach
+                <Filter className="w-3 h-3" />
+                <span>Accepting Only</span>
               </button>
             </div>
-          ) : (
-            <button
-              onClick={() => handleAttachNearestHospital()}
-              disabled={isAttachingHospital}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all active:scale-95 shadow-lg ${
-                isAttachingHospital
-                  ? 'bg-emerald-600/50 text-emerald-100 border border-emerald-400 animate-pulse'
-                  : 'bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-500 hover:from-emerald-500 hover:to-teal-400 text-white shadow-md'
-              }`}
-              title="Automatically find and attach to the closest accepting hospital with available ER beds"
-            >
-              <Zap className="w-4 h-4 fill-white text-white" />
-              {isAttachingHospital ? 'Attaching ER...' : 'Attach Near Hospital'}
-            </button>
-          )}
 
-          <button
-            onClick={() => setIsReportModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white shadow-md transition-all active:scale-95"
-          >
-            <PlusCircle className="w-4 h-4" />
-            Report Scene Incident
-          </button>
-        </div>
-      </div>
+            <div className="space-y-3 max-h-[480px] overflow-y-auto pr-1">
+              {filteredHospitals.map((hospital) => {
+                const isSelected = activeRoute?.hospital?.id === hospital.id;
+                const isRecentlyUpdated = recentlyUpdatedHospitalId === hospital.id;
 
-      {/* Smart Destination Recommendation Banner */}
-      <SmartRecommendationCard
-        recommendation={recommendation}
-        onSelectRoute={handleRouteToHospital}
-      />
-
-      {/* Active Navigation Route HUD (if routed) */}
-      {activeRoute && (
-        <RoutePanel
-          route={activeRoute}
-          onClearRoute={() => handleDetachHospital()}
-        />
-      )}
-
-      {/* Main Grid: Live Emergency Map + Nearby Hospitals */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left / Top (7 cols): Interactive Live Emergency Map */}
-        <div className="lg:col-span-7 space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Navigation className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide font-['Outfit']">
-                Live Emergency Tactical Map
-              </h3>
+                return (
+                  <HospitalCard
+                    key={hospital.id}
+                    hospital={hospital}
+                    onSelectRoute={handleRouteToHospital}
+                    isSelected={isSelected}
+                    isRecentlyUpdated={isRecentlyUpdated}
+                    isLoadingRoute={calculatingRouteId === hospital.id}
+                  />
+                );
+              })}
             </div>
-            <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400 font-medium">
-              Real-Time GPS Tracking Active
-            </span>
-          </div>
-
-          <EmergencyMap
-            hospitals={hospitals}
-            ambulances={ambulances}
-            incidents={incidents}
-            activeRoute={activeRoute}
-            onSelectHospital={handleRouteToHospital}
-            selectedHospitalId={activeRoute?.hospital?.id || currentAmbulance?.destinationHospitalId}
-            onUserLocationChange={handleUserLocationChange}
-            onAttachNearestHospital={handleAttachNearestHospital}
-            isAttaching={isAttachingHospital}
-            height="480px"
-          />
-        </div>
-
-        {/* Right (5 cols): Nearby Hospitals with Live Updating Cards */}
-        <div className="lg:col-span-5 space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide font-['Outfit']">
-              Nearby Emergency Centers ({filteredHospitals.length})
-            </h3>
-
-            <button
-              onClick={() => setFilterAcceptingOnly(!filterAcceptingOnly)}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
-                filterAcceptingOnly
-                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-700 dark:text-emerald-300'
-                  : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <Filter className="w-3 h-3" />
-              Accepting Only
-            </button>
-          </div>
-
-          <div className="space-y-3 max-h-[480px] overflow-y-auto pr-1">
-            {filteredHospitals.map((hospital) => {
-              const isSelected = activeRoute?.hospital?.id === hospital.id;
-              const isRecentlyUpdated = recentlyUpdatedHospitalId === hospital.id;
-
-              return (
-                <HospitalCard
-                  key={hospital.id}
-                  hospital={hospital}
-                  onSelectRoute={handleRouteToHospital}
-                  isSelected={isSelected}
-                  isRecentlyUpdated={isRecentlyUpdated}
-                  isLoadingRoute={calculatingRouteId === hospital.id}
-                />
-              );
-            })}
           </div>
         </div>
-      </div>
 
-      {/* Incident Report Modal */}
-      <IncidentReportModal
-        isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-        onSubmit={handleReportIncident}
-        defaultCoordinates={{
-          lat: currentAmbulance.latitude,
-          lng: currentAmbulance.longitude
-        }}
-      />
+        {/* Incident Report Modal */}
+        <IncidentReportModal
+          isOpen={isReportModalOpen}
+          onClose={() => setIsReportModalOpen(false)}
+          onSubmit={handleReportIncident}
+          defaultCoordinates={{
+            lat: currentAmbulance.latitude,
+            lng: currentAmbulance.longitude
+          }}
+        />
       </div>
     </div>
   );

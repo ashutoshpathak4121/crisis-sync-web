@@ -79,19 +79,18 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
 
   // Fallback demo hospitals if DB still initializing
   const rawHospitals = hospitals.length > 0 ? hospitals : [
-    { id: '1', name: 'AIIMS Apex Trauma Center', address: 'Ring Road, Safdarjung Enclave, New Delhi', resources: { emergencyBedsAvailable: 12, emergencyBedsTotal: 40, icuBedsAvailable: 5, ventilatorsAvailable: 6 } },
-    { id: '2', name: 'Max Super Speciality Hospital', address: '1, 2, Press Enclave Road, Saket, New Delhi', resources: { emergencyBedsAvailable: 6, emergencyBedsTotal: 30, icuBedsAvailable: 2, ventilatorsAvailable: 3 } },
-    { id: '3', name: 'Fortis Escorts Trauma Center', address: 'Okhla Road, Sukhdev Vihar, New Delhi', resources: { emergencyBedsAvailable: 4, emergencyBedsTotal: 25, icuBedsAvailable: 1, ventilatorsAvailable: 2 } },
-    { id: '4', name: 'Medanta Super Emergency Center', address: 'CH Bakhtawar Singh Road, Sector 38, Gurugram', resources: { emergencyBedsAvailable: 15, emergencyBedsTotal: 35, icuBedsAvailable: 6, ventilatorsAvailable: 8 } },
-    { id: '5', name: 'Apollo Emergency Trauma Center', address: 'Sarita Vihar, Mathura Road, New Delhi', resources: { emergencyBedsAvailable: 8, emergencyBedsTotal: 25, icuBedsAvailable: 3, ventilatorsAvailable: 4 } },
-    { id: '6', name: 'Safdarjung Care Center', address: 'Ansari Nagar West, New Delhi', resources: { emergencyBedsAvailable: 2, emergencyBedsTotal: 30, icuBedsAvailable: 0, ventilatorsAvailable: 1 } },
-    { id: '7', name: 'Fortis Hospital Noida', address: 'B-22, Sector 62, Gautam Buddha Nagar, Noida', resources: { emergencyBedsAvailable: 5, emergencyBedsTotal: 20, icuBedsAvailable: 2, ventilatorsAvailable: 2 } }
+    { id: '1', name: 'AIIMS Apex Trauma Center', address: 'Safdarjung Enclave, New Delhi', resources: { emergencyBedsAvailable: 12, emergencyBedsTotal: 40, icuBedsAvailable: 5, ventilatorsAvailable: 6 } },
+    { id: '2', name: 'Max Super Speciality Hospital', address: 'Saket, New Delhi', resources: { emergencyBedsAvailable: 6, emergencyBedsTotal: 30, icuBedsAvailable: 2, ventilatorsAvailable: 3 } },
+    { id: '3', name: 'Fortis Escorts Trauma Center', address: 'Okhla Road, New Delhi', resources: { emergencyBedsAvailable: 4, emergencyBedsTotal: 25, icuBedsAvailable: 1, ventilatorsAvailable: 2 } },
+    { id: '4', name: 'Medanta Super Emergency Center', address: 'Sector 38, Gurugram', resources: { emergencyBedsAvailable: 15, emergencyBedsTotal: 35, icuBedsAvailable: 6, ventilatorsAvailable: 8 } },
+    { id: '5', name: 'Apollo Emergency Trauma Center', address: 'Sarita Vihar, New Delhi', resources: { emergencyBedsAvailable: 8, emergencyBedsTotal: 25, icuBedsAvailable: 3, ventilatorsAvailable: 4 } },
+    { id: '6', name: 'Safdarjung Care Center', address: 'Ansari Nagar, New Delhi', resources: { emergencyBedsAvailable: 2, emergencyBedsTotal: 30, icuBedsAvailable: 0, ventilatorsAvailable: 1 } },
+    { id: '7', name: 'Fortis Hospital Noida', address: 'Sector 62, Noida', resources: { emergencyBedsAvailable: 5, emergencyBedsTotal: 20, icuBedsAvailable: 2, ventilatorsAvailable: 2 } }
   ];
 
   // Filter hospitals by Region
   const filteredHospitals = useMemo(() => {
     if (selectedRegion === 'All NCR') return rawHospitals;
-    const regLower = selectedRegion.toLowerCase();
     return rawHospitals.filter((h) => {
       const addr = (h.address || '').toLowerCase();
       const nm = (h.name || '').toLowerCase();
@@ -207,21 +206,21 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
     <div className="space-y-6">
       {/* Simulation Active Notification Banner */}
       {simulationStatus?.active && (
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-rose-500/15 via-rose-500/10 to-transparent border border-rose-500/30 text-rose-600 dark:text-rose-400">
+        <div className="flex items-center justify-between p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300">
           <div className="flex items-center gap-3">
-            <span className="w-3 h-3 rounded-full bg-rose-500 animate-ping" />
+            <span className="w-2.5 h-2.5 rounded-full bg-red-600" />
             <div>
-              <strong className="text-xs font-bold block">
+              <strong className="text-xs font-semibold block">
                 Active Mass Casualty Surge Simulation in Progress
               </strong>
-              <span className="text-[11px] opacity-80">
+              <span className="text-[11px] text-red-600/80 dark:text-red-300/80 font-medium">
                 {simulationStatus.description || 'Emergency room capacities are actively rising.'} (Step {simulationStatus.step || 1} of 5)
               </span>
             </div>
           </div>
           <button
             onClick={handleResetSimulation}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-sm transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Baseline</span>
@@ -231,51 +230,52 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
 
       {/* Operation Feedback Toast */}
       {feedbackMsg && (
-        <div className="flex items-center gap-2 p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-xs font-medium animate-fadeIn">
-          <Sparkles className="w-4 h-4 text-blue-500 shrink-0" />
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 text-blue-700 dark:text-blue-300 text-xs font-medium">
+          <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
           <span>{feedbackMsg}</span>
         </div>
       )}
 
       {/* Top Header & Analytics Action Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-5 rounded-[26px] bg-white/80 dark:bg-[#0B1220]/80 backdrop-blur-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)]">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center gap-3">
           {onBack && (
             <button
               onClick={onBack}
               title="Return to Cockpit & Live Map"
-              className="p-2.5 rounded-2xl bg-slate-100 dark:bg-white/[0.06] hover:bg-blue-50 dark:hover:bg-blue-500/20 text-slate-600 dark:text-slate-300 hover:text-blue-600 transition-all border border-slate-200 dark:border-white/[0.08] shadow-sm shrink-0"
+              className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer shrink-0"
+              aria-label="Back to overview"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
           )}
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-lg sm:text-xl font-black font-['Outfit'] text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                 Emergency Analytics & Capacity Intelligence
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-200">
+              <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">
                 Live Engine
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Cross-facility telemetry, admission velocities, and AI-predicted bed saturation
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+              Cross-facility telemetry, admission velocities, and predicted bed saturation
             </p>
           </div>
         </div>
 
         {/* Filter Pills & Interactive Actions */}
-        <div className="flex flex-wrap items-center gap-2.5 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           {/* Region Filter Selector */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/[0.08]">
-            <Filter className="w-3.5 h-3.5 text-slate-400 ml-1.5" />
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <Filter className="w-3.5 h-3.5 text-slate-400" />
             <select
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
-              className="bg-transparent text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none pr-2 cursor-pointer"
+              className="bg-transparent text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
             >
               {REGIONS.map((r) => (
-                <option key={r} value={r} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                <option key={r} value={r} className="bg-white dark:bg-slate-800 text-slate-900 dark:text-white">
                   {r}
                 </option>
               ))}
@@ -283,33 +283,33 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
           </div>
 
           {/* Timeframe Selector (24h / 7d / 30d) */}
-          <div className="flex items-center p-1 rounded-xl bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/[0.08]">
+          <div className="flex items-center p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
             <button
               onClick={() => setTimeRange('24h')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+              className={`px-2.5 py-1 rounded-md font-semibold text-xs transition-colors cursor-pointer ${
                 timeRange === '24h'
-                  ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-white shadow-sm font-bold'
-                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               24h
             </button>
             <button
               onClick={() => setTimeRange('7d')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+              className={`px-2.5 py-1 rounded-md font-semibold text-xs transition-colors cursor-pointer ${
                 timeRange === '7d'
-                  ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-white shadow-sm font-bold'
-                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               7 Days
             </button>
             <button
               onClick={() => setTimeRange('30d')}
-              className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
+              className={`px-2.5 py-1 rounded-md font-semibold text-xs transition-colors cursor-pointer ${
                 timeRange === '30d'
-                  ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-white shadow-sm font-bold'
-                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               30 Days
@@ -320,17 +320,17 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
           <button
             onClick={handleRunSimulation}
             disabled={isSimulating}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors cursor-pointer disabled:opacity-50"
           >
-            <Play className="w-3.5 h-3.5 fill-current" />
+            <Play className="w-3.5 h-3.5" />
             <span>{isSimulating ? 'Simulating...' : 'Simulate Surge'}</span>
           </button>
 
           {/* Reset Baseline Button */}
           <button
             onClick={handleResetSimulation}
-            title="Reset simulated spikes back to normal"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm transition-all"
+            title="Reset baseline"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750 transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
             <span className="hidden sm:inline">Reset</span>
@@ -339,96 +339,96 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
           {/* Export Report Button */}
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750 transition-colors cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-blue-600" />
+            <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>Export CSV</span>
           </button>
         </div>
       </div>
 
-      {/* 4 Distinct 3D Colored KPI Summary Cards */}
+      {/* 4 Clean KPI Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Available Emergency Beds (3D Emerald Jade) */}
-        <div className="p-5 rounded-[26px] bg-gradient-to-br from-emerald-50/95 via-teal-50/80 to-emerald-100/60 dark:from-[#06261E] dark:via-[#09352A] dark:to-[#041D17] border border-emerald-300/80 dark:border-emerald-500/40 border-b-[6px] border-b-emerald-600 dark:border-b-emerald-500 shadow-[0_14px_28px_-6px_rgba(5,150,105,0.22),inset_0_1.5px_1.5px_rgba(255,255,255,0.95)] hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">Available ER Beds</span>
-            <span className="inline-flex items-center gap-0.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-500 text-white shadow-sm shadow-emerald-600/30">
+        {/* Card 1: Available Emergency Beds */}
+        <div className="p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-white">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Available ER Beds</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60 font-mono">
               {availBeds} Ready
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-emerald-950 dark:text-emerald-100 font-['Outfit'] mt-1">
-            {availBeds} <span className="text-sm font-semibold text-emerald-700/80 dark:text-emerald-400">/ {totalBeds}</span>
+          <div className="text-2xl sm:text-3xl font-bold font-mono tracking-tight mt-1">
+            {availBeds} <span className="text-sm font-medium text-slate-400 font-sans">/ {totalBeds}</span>
           </div>
-          <p className="text-[10px] text-emerald-800/80 dark:text-emerald-400/80 font-medium mt-1">Across {filteredHospitals.length} filtered centers</p>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">Across {filteredHospitals.length} filtered centers</p>
         </div>
 
-        {/* Card 2: Bed Saturation Rate (3D Amber Gold / Flame) */}
-        <div className="p-5 rounded-[26px] bg-gradient-to-br from-amber-50/95 via-yellow-50/80 to-orange-100/60 dark:from-[#331C08] dark:via-[#42240A] dark:to-[#261506] border border-amber-300/80 dark:border-amber-500/40 border-b-[6px] border-b-amber-600 dark:border-b-amber-500 shadow-[0_14px_28px_-6px_rgba(217,119,6,0.22),inset_0_1.5px_1.5px_rgba(255,255,255,0.95)] hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider">System Saturation Rate</span>
-            <span className={`inline-flex items-center gap-0.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold text-white shadow-sm ${
+        {/* Card 2: Bed Saturation Rate */}
+        <div className="p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-white">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">System Saturation</span>
+            <span className={`px-2 py-0.5 rounded text-[10px] font-semibold font-mono border ${
               Number(saturationPct) > 80
-                ? 'bg-rose-600 shadow-rose-600/30'
-                : 'bg-amber-600 shadow-amber-600/30'
+                ? 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/60'
+                : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/60'
             }`}>
-              <ArrowUpRight className="w-3 h-3" /> {saturationPct}%
+              {saturationPct}%
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-amber-950 dark:text-amber-100 font-['Outfit'] mt-1">
+          <div className="text-2xl sm:text-3xl font-bold font-mono tracking-tight mt-1">
             {saturationPct}%
           </div>
-          <p className="text-[10px] text-amber-800/80 dark:text-amber-400/80 font-medium mt-1">{occBeds} occupied / {totalBeds} total capacity</p>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">{occBeds} occupied / {totalBeds} total</p>
         </div>
 
-        {/* Card 3: Critical Asset Reserves (3D Cobalt Sapphire Blue) */}
-        <div className="p-5 rounded-[26px] bg-gradient-to-br from-blue-50/95 via-sky-50/80 to-indigo-100/60 dark:from-[#0B1E38] dark:via-[#0E294D] dark:to-[#08172C] border border-blue-300/80 dark:border-blue-500/40 border-b-[6px] border-b-blue-600 dark:border-b-blue-500 shadow-[0_14px_28px_-6px_rgba(37,99,235,0.22),inset_0_1.5px_1.5px_rgba(255,255,255,0.95)] hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-blue-800 dark:text-blue-300 uppercase tracking-wider">ICU & Ventilator Ready</span>
-            <span className="inline-flex items-center gap-0.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-blue-600 text-white shadow-sm shadow-blue-600/30">
-              {totalIcu} ICU / {totalVent} Vent
+        {/* Card 3: Critical Asset Reserves */}
+        <div className="p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-white">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">ICU & Vent Ready</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/60 font-mono">
+              {totalIcu} ICU • {totalVent} Vent
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-blue-950 dark:text-blue-100 font-['Outfit'] mt-1">
-            {totalIcu + totalVent} Units
+          <div className="text-2xl sm:text-3xl font-bold font-mono tracking-tight mt-1">
+            {totalIcu + totalVent} <span className="text-sm font-medium text-slate-400 font-sans">Units</span>
           </div>
-          <p className="text-[10px] text-blue-800/80 dark:text-blue-400/80 font-medium mt-1">Available for immediate critical triage</p>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">Life-support standby capacity</p>
         </div>
 
-        {/* Card 4: Average Triage Latency (3D Amethyst Purple) */}
-        <div className="p-5 rounded-[26px] bg-gradient-to-br from-purple-50/95 via-violet-50/80 to-purple-100/60 dark:from-[#1E0F38] dark:via-[#29144D] dark:to-[#170B2B] border border-purple-300/80 dark:border-purple-500/40 border-b-[6px] border-b-purple-600 dark:border-b-purple-500 shadow-[0_14px_28px_-6px_rgba(147,51,234,0.22),inset_0_1.5px_1.5px_rgba(255,255,255,0.95)] hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-purple-800 dark:text-purple-300 uppercase tracking-wider">Avg Triage Latency</span>
-            <span className="inline-flex items-center gap-0.5 px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-purple-600 text-white shadow-sm shadow-purple-600/30">
-              <ArrowDownRight className="w-3 h-3" /> -3.2m
+        {/* Card 4: Average Triage Latency */}
+        <div className="p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-white">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Avg Triage Latency</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60 font-mono">
+              -3.2m
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-purple-950 dark:text-purple-100 font-['Outfit'] mt-1">
-            14.2 min
+          <div className="text-2xl sm:text-3xl font-bold font-mono tracking-tight mt-1">
+            14.2 <span className="text-sm font-medium text-slate-400 font-sans">min</span>
           </div>
-          <p className="text-[10px] text-purple-800/80 dark:text-purple-400/80 font-medium mt-1">Door-to-doctor ER triage average</p>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">Door-to-doctor average</p>
         </div>
       </div>
 
       {/* Row 1: Hospital ER Capacity Stacked Bar Chart & Patient Triage Pie */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Stacked Capacity Comparison (~65% width) */}
-        <div className="lg:col-span-8 p-6 rounded-[26px] bg-white/80 dark:bg-[#0B1220]/80 backdrop-blur-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)]">
+        <div className="lg:col-span-8 p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-white">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white font-['Outfit']">
+              <h3 className="text-sm font-bold tracking-tight">
                 Emergency Bed Occupancy by Medical Facility
               </h3>
-              <p className="text-xs text-slate-400">
-                Real-time breakdown of Available vs Occupied ER Capacity ({selectedRegion})
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Available vs Occupied ER Capacity ({selectedRegion})
               </p>
             </div>
-            <div className="flex items-center gap-3 text-xs font-semibold">
-              <span className="flex items-center gap-1 text-emerald-600">
+            <div className="flex items-center gap-3 text-xs font-medium">
+              <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
                 <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" /> Available Beds
               </span>
-              <span className="flex items-center gap-1 text-rose-500">
-                <span className="w-2.5 h-2.5 rounded-sm bg-rose-500" /> Occupied
+              <span className="flex items-center gap-1.5 text-red-600 dark:text-red-400">
+                <span className="w-2.5 h-2.5 rounded-sm bg-red-500" /> Occupied
               </span>
             </div>
           </div>
@@ -449,12 +449,12 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="rounded-xl p-3 bg-white text-slate-800 border border-slate-200 shadow-2xl text-xs space-y-1">
-                          <strong className="text-slate-900 block font-bold">{data.fullName}</strong>
-                          <div className="text-emerald-600 font-semibold">Available Beds: {data.available}</div>
-                          <div className="text-rose-600 font-semibold">Occupied Beds: {data.occupied}</div>
-                          <div className="text-blue-600">ICU Available: {data.icu} Units</div>
-                          <div className="text-purple-600">Ventilators: {data.vent} Units</div>
+                        <div className="rounded-lg p-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 shadow-lg text-xs space-y-1 font-mono">
+                          <strong className="block font-bold font-sans text-slate-900 dark:text-white">{data.fullName}</strong>
+                          <div className="text-emerald-600 dark:text-emerald-400 font-semibold">Available Beds: {data.available}</div>
+                          <div className="text-red-600 dark:text-red-400 font-semibold">Occupied Beds: {data.occupied}</div>
+                          <div className="text-blue-600 dark:text-blue-400">ICU Available: {data.icu} Units</div>
+                          <div className="text-slate-500 dark:text-slate-400">Ventilators: {data.vent} Units</div>
                         </div>
                       );
                     }
@@ -469,12 +469,12 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
         </div>
 
         {/* Triage Severity Classification Breakdown (~35% width) */}
-        <div className="lg:col-span-4 p-6 rounded-[26px] bg-white/80 dark:bg-[#0B1220]/80 backdrop-blur-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)] flex flex-col justify-between">
+        <div className="lg:col-span-4 p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between text-slate-900 dark:text-white">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white font-['Outfit'] mb-1">
+            <h3 className="text-sm font-bold tracking-tight mb-0.5">
               Active Triage Classification
             </h3>
-            <p className="text-xs text-slate-400 mb-4">Patient severity distribution</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Patient severity distribution</p>
 
             <div className="h-52 w-full flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
@@ -495,11 +495,11 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
                   <Tooltip
                     formatter={(val, name) => [`${val}%`, name]}
                     contentStyle={{
-                      backgroundColor: '#FFFFFF',
-                      borderColor: '#E2E8F0',
-                      borderRadius: '12px',
+                      backgroundColor: '#1E293B',
+                      borderColor: '#334155',
+                      borderRadius: '8px',
                       fontSize: '11px',
-                      color: '#0F172A'
+                      color: '#F8FAFC'
                     }}
                   />
                 </PieChart>
@@ -507,37 +507,37 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
             </div>
           </div>
 
-          <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-white/[0.06] text-xs">
+          <div className="space-y-1.5 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
             {TRIAGE_DISTRIBUTION.map((item) => (
-              <div key={item.name} className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+              <div key={item.name} className="flex items-center justify-between font-medium">
+                <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                  <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: item.color }} />
                   <span>{item.name}</span>
                 </span>
-                <span className="font-bold text-slate-900 dark:text-white">{item.value}%</span>
+                <span className="font-bold font-mono text-slate-900 dark:text-white">{item.value}%</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Row 2: Admission vs Discharge Velocity Area Curve (Dynamic by timeRange) */}
-      <div className="p-6 rounded-[26px] bg-white/80 dark:bg-[#0B1220]/80 backdrop-blur-2xl border border-slate-200/80 dark:border-white/[0.08] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.03)]">
+      {/* Row 2: Admission vs Discharge Velocity Area Curve */}
+      <div className="p-4 sm:p-5 rounded-xl bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-800 shadow-sm text-slate-900 dark:text-white">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white font-['Outfit']">
+            <h3 className="text-sm font-bold tracking-tight">
               Patient Admission vs Discharge Velocity ({timeRange.toUpperCase()})
             </h3>
-            <p className="text-xs text-slate-400">
-              System intake throughput across time: dynamically adapts to selected timeframe
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              System intake throughput across time
             </p>
           </div>
-          <div className="flex items-center gap-4 text-xs font-semibold">
-            <span className="flex items-center gap-1.5 text-blue-600">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" /> Intake Admissions
+          <div className="flex items-center gap-3 text-xs font-medium">
+            <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+              <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400" /> Admissions
             </span>
-            <span className="flex items-center gap-1.5 text-emerald-600">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Patient Discharges
+            <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400" /> Discharges
             </span>
           </div>
         </div>
@@ -559,16 +559,16 @@ const AnalyticsView = ({ isDark = false, onBack }) => {
               <YAxis stroke="#94A3B8" fontSize={11} tickLine={false} axisLine={false} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#FFFFFF',
-                  borderColor: '#E2E8F0',
-                  borderRadius: '12px',
-                  boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
+                  backgroundColor: '#1E293B',
+                  borderColor: '#334155',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                   fontSize: '11px',
-                  color: '#0F172A'
+                  color: '#F8FAFC'
                 }}
               />
-              <Area type="monotone" dataKey="admissions" name="Admissions" stroke="#2563EB" strokeWidth={2.5} fill="url(#intakeWave)" />
-              <Area type="monotone" dataKey="discharges" name="Discharges" stroke="#10B981" strokeWidth={2.5} fill="url(#dischargeWave)" />
+              <Area type="monotone" dataKey="admissions" name="Admissions" stroke="#2563EB" strokeWidth={2} fill="url(#intakeWave)" />
+              <Area type="monotone" dataKey="discharges" name="Discharges" stroke="#10B981" strokeWidth={2} fill="url(#dischargeWave)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>

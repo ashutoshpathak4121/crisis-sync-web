@@ -19,36 +19,36 @@ const NotificationToast = () => {
         return (
           <div
             key={alert.id}
-            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-2xl border backdrop-blur-md transition-all duration-300 animate-slide-in ${
+            className={`pointer-events-auto flex items-start gap-3 p-3.5 rounded-xl shadow-lg border transition-all duration-200 bg-white dark:bg-[#1E293B] ${
               isCritical
-                ? 'bg-red-950/90 border-red-500/50 text-red-200'
+                ? 'border-red-300 dark:border-red-800/80 text-red-900 dark:text-red-200'
                 : isWarning
-                ? 'bg-amber-950/90 border-amber-500/50 text-amber-200'
-                : 'bg-slate-900/90 border-cyan-500/50 text-slate-200'
+                ? 'border-amber-300 dark:border-amber-800/80 text-amber-900 dark:text-amber-200'
+                : 'border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100'
             }`}
           >
             <div className="flex-shrink-0 mt-0.5">
               {isCritical ? (
-                <AlertCircle className="w-5 h-5 text-red-400 animate-bounce" />
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
               ) : isWarning ? (
-                <AlertTriangle className="w-5 h-5 text-amber-400" />
+                <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
               ) : (
-                <Info className="w-5 h-5 text-cyan-400" />
+                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               )}
             </div>
 
             <div className="flex-1 min-w-0">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+              <h4 className="text-xs font-bold tracking-tight text-slate-900 dark:text-white">
                 {alert.title}
               </h4>
-              <p className="mt-1 text-xs leading-relaxed text-slate-300 font-sans">
+              <p className="mt-0.5 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
                 {alert.message}
               </p>
             </div>
 
             <button
               onClick={() => dismissAlert(alert.id)}
-              className="flex-shrink-0 text-slate-400 hover:text-white transition-colors p-1"
+              className="flex-shrink-0 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1"
               aria-label="Dismiss alert"
             >
               <X className="w-4 h-4" />

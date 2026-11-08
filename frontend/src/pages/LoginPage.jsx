@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { DEMO_USERS, getRoleDestination } from '../utils/constants';
-import { Radio, Lock, Mail, ArrowRight, ShieldCheck, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Radio, Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -29,11 +29,6 @@ const LoginPage = () => {
 
     try {
       const user = await login(email, password);
-      // Dedicated Role-Based Redirection:
-      // Hospital -> /hospital
-      // Paramedic -> /ambulance
-      // Admin -> /command
-      // Citizen / User -> /overview
       const destination = location.state?.from?.pathname || getRoleDestination(user.role);
       navigate(destination);
     } catch (err) {
@@ -44,30 +39,25 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-slate-100 dark:bg-[#030712] overflow-hidden select-none font-['Plus_Jakarta_Sans',sans-serif] text-slate-900 dark:text-slate-100 transition-colors duration-300">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/3 w-[550px] h-[550px] bg-cyan-500/10 dark:bg-cyan-500/15 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/3 w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-600/15 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.04)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-50" />
-
-      <div className="relative w-full max-w-md rounded-[32px] border border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-slate-900/40 p-8 shadow-xl shadow-slate-200/50 dark:shadow-[0_25px_70px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
+    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-4 bg-slate-50 dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 transition-colors">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] p-6 sm:p-8 shadow-xl">
         
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#4E35CD] to-indigo-500 p-[1.5px] shadow-lg shadow-indigo-500/25 mb-3 text-white">
-            <Radio className="w-6 h-6 animate-pulse" />
+          <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800/60 mb-3 text-blue-600 dark:text-blue-400">
+            <Radio className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight font-['Outfit']">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Sign In to CrisisSync
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
             Real-Time Emergency Resource Allocation Platform
           </p>
         </div>
 
         {/* 1-Click Fast Demo Credentials Selector */}
-        <div className="mb-6 p-3.5 rounded-2xl bg-[#F6F7FD] dark:bg-white/[0.04] border border-slate-200/80 dark:border-white/[0.08]">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#4E35CD] dark:text-indigo-400 block mb-2">
+        <div className="mb-5 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-2">
             1-Click Demo Accounts:
           </span>
           <div className="grid grid-cols-2 gap-2">
@@ -78,14 +68,14 @@ const LoginPage = () => {
                   key={u.email}
                   type="button"
                   onClick={() => handleSelectDemoUser(u)}
-                  className={`p-2.5 rounded-xl text-left transition-all border ${
+                  className={`p-2.5 rounded-lg text-left transition-colors border cursor-pointer ${
                     isSelected
-                      ? 'bg-indigo-50 dark:bg-indigo-500/20 border-[#4E35CD] text-[#4E35CD] dark:text-indigo-300 shadow-sm'
-                      : 'bg-white dark:bg-white/[0.02] border-slate-200 dark:border-white/[0.06] text-slate-700 dark:text-slate-300 hover:border-indigo-300'
+                      ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-600 text-blue-700 dark:text-blue-300 shadow-sm'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600'
                   }`}
                 >
-                  <span className="block text-xs font-bold truncate">{u.name || u.title}</span>
-                  <span className="block text-[10px] font-mono text-slate-400 uppercase">{u.role}</span>
+                  <span className="block text-xs font-semibold truncate">{u.name || u.title}</span>
+                  <span className="block text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase">{u.role}</span>
                 </button>
               );
             })}
@@ -94,7 +84,7 @@ const LoginPage = () => {
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="mb-4 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-500/40 text-rose-700 dark:text-rose-300 text-xs font-semibold">
+          <div className="mb-4 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300 text-xs font-medium">
             {errorMessage}
           </div>
         )}
@@ -102,34 +92,34 @@ const LoginPage = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 font-mono">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="ashutosh@crisissync.demo"
-                className="w-full bg-[#F6F7FD] dark:bg-[#060B16] border border-slate-200 dark:border-white/[0.1] rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 focus:border-[#4E35CD] focus:outline-none transition-all font-medium"
+                placeholder="hospital@crisissync.demo"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:border-blue-500 focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 font-mono">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#F6F7FD] dark:bg-[#060B16] border border-slate-200 dark:border-white/[0.1] rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-200 focus:border-[#4E35CD] focus:outline-none transition-all font-mono"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none transition-colors font-mono"
               />
             </div>
           </div>
@@ -137,9 +127,9 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-3 py-3 px-4 rounded-xl bg-[#4E35CD] hover:bg-indigo-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-indigo-500/25 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full mt-2 py-2.5 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs uppercase tracking-wider shadow-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
           >
-            {loading ? 'Authenticating...' : 'Enter Dashboard'}
+            <span>{loading ? 'Authenticating...' : 'Enter Dashboard'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -148,7 +138,7 @@ const LoginPage = () => {
         <div className="mt-5 text-center">
           <Link
             to="/overview"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#4E35CD] dark:hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Continue as Guest / Return to Dashboard</span>

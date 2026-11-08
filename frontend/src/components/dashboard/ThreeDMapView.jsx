@@ -519,17 +519,17 @@ const GoogleMapView = ({ selectedHospitalId, onSelectHospital, onReserveBed }) =
   };
 
   return (
-    <div className="relative rounded-2xl overflow-hidden border border-white/[0.08] dark:border-white/[0.08] border-slate-200/80 bg-slate-900/90 dark:bg-[#0A101D]/90 shadow-2xl backdrop-blur-xl">
+    <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] shadow-sm">
       {/* Top Google Maps Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-white/[0.06] dark:border-white/[0.06] border-slate-200/80 bg-slate-950/60 dark:bg-slate-950/70 light:bg-slate-50/90 z-20 relative">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 z-20 relative">
         {/* Layer Mode Tabs (Google Map, Satellite, Terrain, Traffic) */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.04] dark:bg-white/[0.04] light:bg-slate-200/60 border border-white/[0.06] dark:border-white/[0.06] light:border-slate-300/60">
+        <div className="flex items-center gap-1 p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
           <button
             onClick={() => setActiveLayer('STREETS')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               activeLayer === 'STREETS'
-                ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/30'
-                : 'text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-white dark:hover:text-white light:hover:text-slate-900'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <MapIcon className="w-3.5 h-3.5" />
@@ -537,10 +537,10 @@ const GoogleMapView = ({ selectedHospitalId, onSelectHospital, onReserveBed }) =
           </button>
           <button
             onClick={() => setActiveLayer('HYBRID')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               activeLayer === 'HYBRID'
-                ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/30'
-                : 'text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-white dark:hover:text-white light:hover:text-slate-900'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Globe className="w-3.5 h-3.5" />
@@ -548,10 +548,10 @@ const GoogleMapView = ({ selectedHospitalId, onSelectHospital, onReserveBed }) =
           </button>
           <button
             onClick={() => setActiveLayer('TERRAIN')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               activeLayer === 'TERRAIN'
-                ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/30'
-                : 'text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-white dark:hover:text-white light:hover:text-slate-900'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -559,10 +559,10 @@ const GoogleMapView = ({ selectedHospitalId, onSelectHospital, onReserveBed }) =
           </button>
           <button
             onClick={() => setActiveLayer('TRAFFIC')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
               activeLayer === 'TRAFFIC'
-                ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30'
-                : 'text-slate-400 dark:text-slate-400 light:text-slate-600 hover:text-white dark:hover:text-white light:hover:text-slate-900'
+                ? 'bg-red-600 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Radio className="w-3.5 h-3.5" />
@@ -580,17 +580,17 @@ const GoogleMapView = ({ selectedHospitalId, onSelectHospital, onReserveBed }) =
                 else routeGroupRef.current?.clearLayers();
               }
             }}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
               showRoute
-                ? 'bg-blue-500/20 text-blue-400 border-blue-500/40 shadow-sm'
-                : 'bg-white/[0.04] text-slate-400 border-white/[0.08] hover:text-white'
+                ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800/60 shadow-sm'
+                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Ambulance className="w-3.5 h-3.5" />
             <span>Ambulance GPS Route</span>
             <span
               className={`w-2 h-2 rounded-full ${
-                showRoute ? 'bg-blue-400 animate-pulse' : 'bg-slate-500'
+                showRoute ? 'bg-blue-600 dark:bg-blue-400' : 'bg-slate-400'
               }`}
             />
           </button>
@@ -598,21 +598,21 @@ const GoogleMapView = ({ selectedHospitalId, onSelectHospital, onReserveBed }) =
       </div>
 
       {/* Floating Google Maps Search & Fly-To Box */}
-      <div className="absolute top-16 left-4 z-20 w-64 sm:w-72 shadow-2xl">
+      <div className="absolute top-16 left-4 z-20 w-64 sm:w-72 shadow-md">
         <form onSubmit={handleSearchSubmit} className="relative flex items-center">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search on Google Map (e.g. AIIMS)..."
-            className="w-full pl-9 pr-8 py-2 rounded-xl bg-slate-950/85 dark:bg-slate-950/85 light:bg-white/95 backdrop-blur-md border border-white/15 dark:border-white/15 light:border-slate-300 text-xs text-white dark:text-white light:text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-400 shadow-xl"
+            placeholder="Search on Map (e.g. AIIMS)..."
+            className="w-full pl-9 pr-8 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 shadow-md"
           />
-          <Search className="w-4 h-4 text-cyan-400 absolute left-3 pointer-events-none" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 text-xs text-slate-400 hover:text-white"
+              className="absolute right-2.5 text-xs text-slate-400 hover:text-slate-700 dark:hover:text-white cursor-pointer"
             >
               ×
             </button>
@@ -623,60 +623,60 @@ const GoogleMapView = ({ selectedHospitalId, onSelectHospital, onReserveBed }) =
       {/* The Leaflet Google Map Container */}
       <div
         ref={mapContainerRef}
-        className="w-full h-[400px] sm:h-[470px] lg:h-[500px] bg-[#070D18] z-10"
+        className="w-full h-[400px] sm:h-[470px] lg:h-[500px] bg-slate-900 z-10"
         style={{ minHeight: '400px' }}
       />
 
-      {/* Google Maps Style Float Controls (Zoom, My Location, Recenter) */}
+      {/* Map Float Controls (Zoom, My Location, Recenter) */}
       <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-20">
         <button
           onClick={handleRecenter}
           title="Recenter Delhi NCR"
-          className="p-2.5 rounded-xl bg-slate-950/80 dark:bg-slate-950/80 light:bg-white/95 backdrop-blur-md border border-white/15 dark:border-white/15 light:border-slate-300 text-slate-200 dark:text-slate-200 light:text-slate-800 hover:bg-slate-900 shadow-xl transition-all"
+          className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 shadow-md transition-colors cursor-pointer"
         >
-          <RotateCcw className="w-4 h-4 text-cyan-400" />
+          <RotateCcw className="w-4 h-4 text-blue-600 dark:text-blue-400" />
         </button>
 
         <button
           onClick={handleGetMyLocation}
           title="Locate Me (GPS)"
           disabled={isLocating}
-          className="p-2.5 rounded-xl bg-slate-950/80 dark:bg-slate-950/80 light:bg-white/95 backdrop-blur-md border border-white/15 dark:border-white/15 light:border-slate-300 text-slate-200 dark:text-slate-200 light:text-slate-800 hover:bg-slate-900 shadow-xl transition-all"
+          className="p-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 shadow-md transition-colors cursor-pointer"
         >
-          <Locate className={`w-4 h-4 ${isLocating ? 'animate-spin text-blue-400' : 'text-blue-500'}`} />
+          <Locate className={`w-4 h-4 ${isLocating ? 'animate-spin text-blue-600' : 'text-blue-600 dark:text-blue-400'}`} />
         </button>
 
-        <div className="flex flex-col rounded-xl overflow-hidden bg-slate-950/80 dark:bg-slate-950/80 light:bg-white/95 backdrop-blur-md border border-white/15 dark:border-white/15 light:border-slate-300 shadow-xl">
+        <div className="flex flex-col rounded-lg overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md">
           <button
             onClick={handleZoomIn}
             title="Zoom In"
-            className="p-2 text-slate-200 dark:text-slate-200 light:text-slate-800 hover:bg-white/10 dark:hover:bg-white/10 light:hover:bg-slate-100 border-b border-white/10 dark:border-white/10 light:border-slate-200"
+            className="p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 border-b border-slate-200 dark:border-slate-700 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
           </button>
           <button
             onClick={handleZoomOut}
             title="Zoom Out"
-            className="p-2 text-slate-200 dark:text-slate-200 light:text-slate-800 hover:bg-white/10 dark:hover:bg-white/10 light:hover:bg-slate-100"
+            className="p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-750 cursor-pointer"
           >
             <Minus className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Google Maps Legend Pill (Bottom Left) */}
-      <div className="absolute bottom-3 left-4 z-20 hidden sm:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-950/80 dark:bg-slate-950/80 light:bg-white/95 backdrop-blur-md border border-white/15 dark:border-white/15 light:border-slate-300 text-[10px] font-mono text-slate-300 dark:text-slate-300 light:text-slate-700 shadow-lg">
+      {/* Legend Pill (Bottom Left) */}
+      <div className="absolute bottom-3 left-4 z-20 hidden sm:flex items-center gap-3 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-mono text-slate-700 dark:text-slate-300 shadow-md">
         <span className="flex items-center gap-1">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> &gt;70% Beds
+          <span className="w-2 h-2 rounded-full bg-emerald-500" /> &gt;70% Beds
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Moderate
+          <span className="w-2 h-2 rounded-full bg-amber-500" /> Moderate
         </span>
         <span className="flex items-center gap-1">
-          <span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Critical ER
+          <span className="w-2 h-2 rounded-full bg-rose-500" /> Critical ER
         </span>
-        <span className="text-slate-500">|</span>
-        <span className="text-cyan-400 font-bold">Google Maps Engine</span>
+        <span className="text-slate-300 dark:text-slate-600">|</span>
+        <span className="text-blue-600 dark:text-blue-400 font-semibold font-sans">Tactical Map</span>
       </div>
     </div>
   );

@@ -4,14 +4,14 @@ import { AlertCircle, Users, Clock } from 'lucide-react';
 
 const IncidentFeed = ({ incidents = [] }) => {
   return (
-    <div className="rounded-[28px] border border-rose-200/80 dark:border-rose-500/20 bg-white/85 dark:bg-slate-900/40 backdrop-blur-2xl p-5 sm:p-6 shadow-lg shadow-rose-100/50 dark:shadow-[0_15px_35px_rgba(0,0,0,0.4),0_0_20px_rgba(244,63,94,0.08)]">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1E293B] p-4 sm:p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-red-500/15 border border-red-500/30 text-red-600 dark:text-red-400">
-            <AlertCircle className="w-4 h-4 animate-pulse" />
+          <div className="p-2 rounded-lg bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 text-red-600 dark:text-red-400">
+            <AlertCircle className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide font-['Outfit']">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white tracking-wide">
               Live Emergency Incident Feed
             </h4>
             <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
@@ -19,7 +19,7 @@ const IncidentFeed = ({ incidents = [] }) => {
             </span>
           </div>
         </div>
-        <span className="text-[10px] font-mono uppercase tracking-widest text-red-600 dark:text-red-400 px-2 py-0.5 rounded bg-red-500/10 border border-red-400/40">
+        <span className="text-[10px] font-mono uppercase tracking-wider text-red-700 dark:text-red-300 px-2 py-0.5 rounded bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/60 font-semibold">
           Radar Active
         </span>
       </div>
@@ -28,27 +28,27 @@ const IncidentFeed = ({ incidents = [] }) => {
         {incidents.map((inc) => (
           <div
             key={inc.id}
-            className="p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-950/40 border border-slate-200/80 dark:border-white/[0.07] hover:border-slate-300 dark:hover:border-white/[0.18] hover:bg-slate-100 dark:hover:bg-slate-900/50 transition-all duration-200 group shadow-sm"
+            className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 hover:border-slate-300 dark:hover:border-slate-600 transition-colors group"
           >
             <div className="flex items-start justify-between gap-2">
               <div>
-                <h5 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
+                <h5 className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {inc.type}
                 </h5>
-                <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
                   {inc.description}
                 </p>
               </div>
               <StatusBadge status={inc.severity} type="incident" size="sm" />
             </div>
 
-            <div className="mt-3 pt-2 border-t border-slate-200/80 dark:border-white/[0.04] flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-              <span className="flex items-center gap-1.5 text-cyan-700 dark:text-cyan-300 font-semibold">
-                <Users className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-                {inc.patientCount} casualty(s)
+            <div className="mt-2.5 pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+              <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-medium font-sans">
+                <Users className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span className="font-mono font-bold">{inc.patientCount}</span> casualty(s)
               </span>
-              <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3 h-3 text-slate-400" />
                 {new Date(inc.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </span>
             </div>
